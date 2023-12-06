@@ -24,7 +24,7 @@ public class SwerveManager {
      * @param translation desired translation wrt the field
      * @param rotation desired rotation
      */
-    public void rotateAndDrive(Vector2 translation, double rotation){
+    public static void rotateAndDrive(Vector2 translation, double rotation){
         double heading = Pigeon.getRotationRad();
         Vector2 trans = translation.rotate(RA - heading);//wrt robot
         Vector2[] commands = new Vector2[4];
@@ -41,7 +41,7 @@ public class SwerveManager {
         }
     }
 
-    public void brake(){
+    public static void brake(){
         for(SwerveMod mod : mods){
             mod.rotate(mod.getPosition().atan2());
             mod.drive(0);

@@ -5,6 +5,9 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.robot.subsystems.OI;
+import frc.robot.subsystems.Pigeon;
+import frc.robot.subsystems.swerve.SwerveManager;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -18,10 +21,17 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   @Override
-  public void robotInit() {}
+  public void robotInit() {
+    SwerveManager.init();
+    Pigeon.init();
+    OI.init();
+    
+  }
 
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    OI.update();
+  }
 
   @Override
   public void autonomousInit() {}
