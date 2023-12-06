@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.controllermaps.XBoxOne;
 import frc.robot.subsystems.swerve.SwerveManager;
+import frc.robot.subsystems.telemetry.Log;
 import frc.robot.utils.Vector2;
 import static frc.robot.utils.Constants.*;
 
@@ -19,6 +20,7 @@ public class OI {
     private static final int crawl = XBoxOne.AXIS_LEFT_TRIGGER;
 
     //state fields
+    @Log
     private static boolean braking;
 
     public static void init(){
