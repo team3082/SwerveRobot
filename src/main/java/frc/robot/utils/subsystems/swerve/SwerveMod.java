@@ -1,6 +1,5 @@
 package frc.robot.utils.subsystems.swerve;
 
-import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
@@ -10,22 +9,20 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import frc.robot.RobotConfig;
 import frc.robot.utils.Vector2;
-
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 
 
 public class SwerveMod {
     
-    private static final double ticksPerRotationSteer = RobotConfig.ticksPerRotationSteer;
-    private static final double ticksPerRotationDrive = RobotConfig.ticksPerRotationDrive;
+    private static final double TAU = 2 * Math.PI;
+    private static final double NEOCOUNTSPERREVOLUTION = 42;
+    private static final double DRIVERATIO = 6.12;
+    private static final double STEERRATIO = 150/7;
+    private static final double WHEELRADIUS = 2.0;//inches
 
-    public CANSparkMax steer;
-    public CANSparkMax drive;
-    public CANCoder absEncoder;
+    private CANSparkMax steer;
+    private CANSparkMax drive;
+    private CANCoder absEncoder;
 
     public Vector2 pos;
 
@@ -33,15 +30,11 @@ public class SwerveMod {
 
     private final double cancoderOffset;
 
-    private static final double simMaxTicksPerSecond = 40000;
-    private double simSteerAng;
-    private double simDriveVel;
-
-    public SparkMaxPIDController drivePID, steerPID;
+    private SparkMaxPIDController drivePID, steerPID;
     private RelativeEncoder steerEncoder, driveEncoder;
 
 
-    public SwerveMod(int steerID, int driveID, double x, double y, double cancoderOffset, double falconOffset) {
+    SwerveMod(int steerID, int driveID, double x, double y, double cancoderOffset) {
         absEncoder = new CANCoder(steerID);
         steer = new CANSparkMax(steerID, MotorType.kBrushless);
         drive = new CANSparkMax(driveID, MotorType.kBrushless);
@@ -64,8 +57,11 @@ public class SwerveMod {
         steerEncoder = steer.getEncoder();
         driveEncoder = drive.getEncoder();
 
-        steerEncoder.setPositionConversionFactor(42);
-        driveEncoder.setPositionConversionFactor(42);
+        //setting the encoders to work in radians
+        steerEncoder.setPositionConversionFactor(NEOCOUNTSPERREVOLUTION * STEERRATIO * TAU);
+        driveEncoder.setPositionConversionFactor(NEOCOUNTSPERREVOLUTION * DRIVERATIO * TAU);
+        steerEncoder.setVelocityConversionFactor(NEOCOUNTSPERREVOLUTION * STEERRATIO * TAU);
+        driveEncoder.setVelocityConversionFactor(NEOCOUNTSPERREVOLUTION * DRIVERATIO * TAU);
         
         drive.setInverted(true);
         steer.setInverted(false);
@@ -83,9 +79,6 @@ public class SwerveMod {
         // Enable voltage compensation to prevent variable behavior when the battery gets low/poor 
         drive.enableVoltageCompensation(12.5);
 
-//        steer.configVoltageCompSaturation(12.0);
-//        steer.enableVoltageCompensation(true);
-
         this.cancoderOffset = cancoderOffset;
 
         inverted = false;
@@ -93,90 +86,49 @@ public class SwerveMod {
         resetSteerSensor();
     }
 
-    public void resetSteerSensor() {
-        // Align the falcon to the cancoder
+    private void resetSteerSensor() {
         double pos = absEncoder.getAbsolutePosition() - cancoderOffset;
-        pos = pos / 360.0 * ticksPerRotationSteer;
+        pos = (pos / 360.0) * TAU;
         steerEncoder.setPosition(pos);
-        steerPID.setReference(pos, ControlType.kPosition);
     }
     
-
-    public void drive(double power) {
+    /**sets the drive motor to drive */
+    void drive(double power) {
         drivePID.setReference(power, ControlType.kDutyCycle);
-        simDriveVel = simMaxTicksPerSecond * power * (inverted ? -1.0 : 1.0);
     }
 
-    // Rotates to angle given in radians
-    public void rotateToRad(double angle) {
-        rotate((angle - Math.PI / 2) / (2 * Math.PI) * ticksPerRotationSteer);
-    }
-
-    // Rotates to a position given in ticks
-    public void rotate(double toAngle) {
-        double motorPos;
-        if (RobotBase.isSimulation())
-            motorPos = simSteerAng;
-        else 
-            motorPos = steerEncoder.getPosition();
-
-        // The number of full rotations the motor has made
-        int numRot = (int) Math.floor(motorPos / ticksPerRotationSteer);
-
-        // The target motor position dictated by the joystick, in motor ticks
-        double joystickTarget = numRot * ticksPerRotationSteer + toAngle;
-        double joystickTargetPlus = joystickTarget + ticksPerRotationSteer;
-        double joystickTargetMinus = joystickTarget - ticksPerRotationSteer;
-
-        // The true destination for the motor to rotate to
-        double destination;
-
-        // Determine if, based on the current motor position, it should stay in the same
-        // rotation, enter the next, or return to the previous.
-        if (Math.abs(joystickTarget - motorPos) < Math.abs(joystickTargetPlus - motorPos)
-                && Math.abs(joystickTarget - motorPos) < Math.abs(joystickTargetMinus - motorPos)) {
-            destination = joystickTarget;
-        } else if (Math.abs(joystickTargetPlus - motorPos) < Math.abs(joystickTargetMinus - motorPos)) {
-            destination = joystickTargetPlus;
-        } else {
-            destination = joystickTargetMinus;
+    /**Rotates to an angle given in radians
+     * @param desired angle in radians(0,2pi)
+     */
+    void rotate(double destPos){
+        double steerPosUnclamped = steerEncoder.getPosition();
+        //clamping steerPos to (0,2pi);
+        double steerPos = (steerPosUnclamped % TAU + 1) % TAU;
+        double diff = destPos - steerPos;
+        //minimum angular displacement between pos and dest pos
+        double minDisp;
+        //determining the closest viable position for the motor to go to
+        if(Math.abs(diff) > 1.5 * Math.PI){
+            minDisp = diff - Math.signum(diff) * TAU;
+        }else if(Math.abs(diff) > 0.5 * Math.PI){
+            inverted = !inverted;
+            minDisp = diff - Math.signum(diff) * Math.PI;
+        }else{
+            minDisp = diff;
         }
-
-        // If the target position is farther than a quarter rotation away from the
-        // current position, invert its direction instead of rotating it the full
-        // distance
-        if (Math.abs(destination - motorPos) > ticksPerRotationSteer / 4.0) {
-            inverted = true;
-            if (destination > motorPos)
-                destination -= ticksPerRotationSteer / 2.0;
-            else
-                destination += ticksPerRotationSteer / 2.0;
-        } else {
-            inverted = false;
-        }
-
-        //steer.set(TalonFXControlMode.MotionMagic, destination);
-        steerPID.setReference(destination,ControlType.kPosition);
-
-        simSteerAng = destination;
-        
+        double trueDest = steerPosUnclamped + minDisp;
+        steerPID.setReference(trueDest, ControlType.kPosition);
     }
 
 
-    // Returns an angle in radians
-    public double getSteerAngle() {
-        if (RobotBase.isSimulation()) {
-            return simSteerAng / ticksPerRotationSteer * Math.PI * 2 + Math.PI / 2;
-        }
-        return steerEncoder.getPosition() / ticksPerRotationSteer * Math.PI * 2 + Math.PI / 2;
-        }
+    /** Returns steer angle with reference to the front of the robot in radians */
+    double getSteerAngle() {
+        return steerEncoder.getPosition();
+    }
 
     
-
-    public double getDriveVelocity() {
-        if (RobotBase.isSimulation()) {
-            return simDriveVel * 10 / ticksPerRotationDrive * (4 * Math.PI);
-        }
-        return driveEncoder.getVelocity() * 10 / ticksPerRotationDrive * (4 * Math.PI);
+    /**returns drive velocity in ft/s */
+    double getDriveVelocity() {
+        return driveEncoder.getVelocity() / 60 * WHEELRADIUS;
     }
 }
