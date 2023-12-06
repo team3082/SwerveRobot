@@ -1,4 +1,4 @@
-package frc.robot.utils.subsystems.swerve;
+package frc.robot.subsystems.swerve;
 
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
@@ -17,18 +17,18 @@ import static frc.robot.utils.Constants.*;
 
 public class SwerveMod {
 
-    private CANSparkMax steer;
-    private CANSparkMax drive;
-    private CANCoder absEncoder;
+    private final CANSparkMax steer;
+    private final CANSparkMax drive;
+    private final CANCoder absEncoder;
 
-    public Vector2 pos;
+    private final Vector2 pos;
 
     private boolean inverted;
 
     private final double cancoderOffset;
 
     private SparkMaxPIDController drivePID, steerPID;
-    private RelativeEncoder steerEncoder, driveEncoder;
+    private final RelativeEncoder steerEncoder, driveEncoder;
 
 
     SwerveMod(int steerID, int driveID, double x, double y, double cancoderOffset) {
@@ -117,6 +117,11 @@ public class SwerveMod {
         steerPID.setReference(trueDest, ControlType.kPosition);
     }
 
+    void set(Vector2 command){
+        rotate(command.atan2());
+        drive(command.mag());
+    }
+
 
     /** Returns steer angle with reference to the front of the robot in radians */
     double getSteerAngle() {
@@ -127,5 +132,9 @@ public class SwerveMod {
     /**returns drive velocity in ft/s */
     double getDriveVelocity() {
         return driveEncoder.getVelocity() / 60 * (WHEELDIAMETER / 2.0);
+    }
+
+    Vector2 getPosition(){
+        return pos.clone();
     }
 }

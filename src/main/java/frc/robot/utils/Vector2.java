@@ -93,4 +93,7 @@ public class Vector2 {
         return String.format("(%.2f, %.2f)", x, y);
     }
 
+    public Vector2 clone(){
+        return new Vector2(x,y);
+    }
 }
