@@ -23,16 +23,16 @@ public class OI {
     @Log
     private static boolean braking;
 
-    public static void init(){
+    public static void init() {
         driverStick = new Joystick(0);
         braking = false;
     }
 
-    private static double smoothInput(double input){
+    private static double smoothInput(double input) {
         return Math.pow(input, 2);
     }
 
-    private static void driveInput(){
+    private static void driveInput() {
         //swerve commands before boost/crawl
         Vector2 movementCommand = new Vector2(smoothInput(driverStick.getRawAxis(moveX)), smoothInput(driverStick.getRawAxis(moveY)));
         double rotationCommand = smoothInput(driverStick.getRawAxis(rotateX));
@@ -46,30 +46,30 @@ public class OI {
 
         //Boost
         double boostPercent = driverStick.getRawAxis(boost);
-        if(boostPercent > BOOSTDEAD){
+        if (boostPercent > BOOSTDEAD) {
             movementScale = NORMTRANSFACTOR + (BOOSTTRANSFACTOR - NORMTRANSFACTOR) * boostPercent;
             rotationScale = NORMTRANSFACTOR + (BOODYROTFACTOR - NORMROTFACTOR) * boostPercent;
         } 
 
         //Crawl, overrides boost
         double crawlPercent = driverStick.getRawAxis(crawl);
-        if(crawlPercent > CRAWLDEAD){
+        if (crawlPercent > CRAWLDEAD) {
             movementScale = NORMTRANSFACTOR + (CRAWLTRANSFACTOR - NORMTRANSFACTOR) * crawlPercent;
             rotationScale = NORMTRANSFACTOR + (CRAWLROTFACTOR - NORMROTFACTOR) * crawlPercent;
         } 
 
-        SwerveManager.rotateAndDrive(movementCommand.mul(movementScale),rotationCommand * rotationScale);
+        SwerveManager.rotateAndDrive(movementCommand.mul(movementScale), rotationCommand * rotationScale);
     }
 
-    private static void brake(){
+    private static void brake() {
         SwerveManager.brake();
     }
 
-    private static void zeroPigeon(){
+    private static void zeroPigeon() {
         Pigeon.zero();
     }
 
-    public static void update(){
+    public static void update() {
         if(driverStick.getRawButtonPressed(parkingBrake)) braking = !braking;
         if(driverStick.getRawButtonPressed(pigeonZero)) zeroPigeon();
         if(braking) brake();

@@ -11,23 +11,25 @@ public class Telemetry {
     private static final ArrayList<Field> trackedFields = new ArrayList<Field>();
 
     //Initiallize this class after all the classes that it is logging
-    public static void init(){
-        for(Class c : classes){
+    public static void init() {
+        for (Class c : classes) {
             Field[] declaredFields = c.getDeclaredFields();
-            for(Field f: declaredFields){
-                if(f.isAnnotationPresent(Log.class)){
+
+            for (Field f: declaredFields) {
+                if (f.isAnnotationPresent(Log.class)) {
                     f.setAccessible(true);
                     trackedFields.add(f);
                 }
             }
+
         }
     }
 
     public static void printValues(){
-        for(Field f: trackedFields){
-            try{
+        for (Field f: trackedFields) {
+            try {
                 System.out.println(f.getName() + " : " + f.get(f.getDeclaringClass()).toString());
-            }catch(IllegalAccessException e){
+            } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }

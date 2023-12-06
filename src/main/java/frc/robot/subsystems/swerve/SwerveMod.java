@@ -108,11 +108,11 @@ public class SwerveMod {
         
         double steerPosUnclamped = steerEncoder.getPosition();
 
-        // Clamping steerPos to (0, 2pi);
+        // Clamping steerPos to (0, 2pi)
         double steerPos = (steerPosUnclamped % TAU + 1) % TAU;
         double diff = destPos - steerPos;
 
-        //The minimum angular displacement between pos and destination pos
+        // The minimum angular displacement between pos and destination pos
         double minDisp;
 
         // Determine the closest viable position for the motor to go to
