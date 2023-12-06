@@ -3,15 +3,15 @@ package frc.robot.utils;
 public final class Constants {
     //QOL
     public static final double TAU = 2 * Math.PI;
-    public static final double RA = Math.PI / 4; // Right angle
+    public static final double RA = Math.PI / 2; // Right angle
 
     //OI
-    public static final double kBOOSTTRANS = 1.0;
-    public static final double kBOOSTROT = 1.0;
-    public static final double kNORMTRANS = 0.6;
-    public static final double kNORMROT = 0.6;
-    public static final double kCRAWLTRANS = 0.3;
-    public static final double kCRAWLROT = 0.3;
+    public static final double BOOSTTRANSFACTOR = 1.0;
+    public static final double BOODYROTFACTOR = 1.0;
+    public static final double NORMTRANSFACTOR = 0.6;
+    public static final double NORMROTFACTOR = 0.6;
+    public static final double CRAWLTRANSFACTOR = 0.3;
+    public static final double CRAWLROTFACTOR = 0.3;
     public static final double BOOSTDEAD = 0.05;
     public static final double CRAWLDEAD = 0.05;
     public static final double DRIVETRANSDEAD = 0.05;

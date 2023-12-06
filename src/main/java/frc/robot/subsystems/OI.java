@@ -39,21 +39,21 @@ public class OI {
         if(movementCommand.mag() < DRIVETRANSDEAD) movementCommand = new Vector2();
         if(Math.abs(rotationCommand) < DRIVEROTDEAD) rotationCommand = 0;
 
-        double movementScale = kNORMTRANS;
-        double rotationScale = kNORMROT;
+        double movementScale = NORMTRANSFACTOR;
+        double rotationScale = NORMROTFACTOR;
 
         //Boost
         double boostPercent = driverStick.getRawAxis(boost);
         if(boostPercent > BOOSTDEAD){
-            movementScale = kNORMTRANS + (kBOOSTTRANS - kNORMTRANS) * boostPercent;
-            rotationScale = kNORMTRANS + (kBOOSTROT - kNORMROT) * boostPercent;
+            movementScale = NORMTRANSFACTOR + (BOOSTTRANSFACTOR - NORMTRANSFACTOR) * boostPercent;
+            rotationScale = NORMTRANSFACTOR + (BOODYROTFACTOR - NORMROTFACTOR) * boostPercent;
         } 
 
         //Crawl, overrides boost
         double crawlPercent = driverStick.getRawAxis(crawl);
         if(crawlPercent > CRAWLDEAD){
-            movementScale = kNORMTRANS + (kCRAWLTRANS - kNORMTRANS) * crawlPercent;
-            rotationScale = kNORMTRANS + (kCRAWLROT - kNORMROT) * crawlPercent;
+            movementScale = NORMTRANSFACTOR + (CRAWLTRANSFACTOR - NORMTRANSFACTOR) * crawlPercent;
+            rotationScale = NORMTRANSFACTOR + (CRAWLROTFACTOR - NORMROTFACTOR) * crawlPercent;
         } 
 
         SwerveManager.rotateAndDrive(movementCommand.mul(movementScale),rotationCommand * rotationScale);
