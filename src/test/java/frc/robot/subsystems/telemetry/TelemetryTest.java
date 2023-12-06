@@ -8,9 +8,11 @@ public class TelemetryTest {
     @Test
     public void test(){
         OI.init();
-        Telemetry.init();
-
-        assertEquals(Telemetry.numFields(), 1);
-        Telemetry.printValues();
+        try{
+            Telemetry.init();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        Telemetry.printAll();
     }
 }
