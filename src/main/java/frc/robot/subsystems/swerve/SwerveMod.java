@@ -14,7 +14,6 @@ import frc.robot.utils.Vector2;
 import static frc.robot.utils.Constants.TAU;
 import static frc.robot.utils.Constants.*;
 
-
 public class SwerveMod {
 
     private final CANSparkMax steer;
@@ -31,17 +30,18 @@ public class SwerveMod {
     private final RelativeEncoder steerEncoder, driveEncoder;
 
 
-    SwerveMod(int steerID, int driveID, double x, double y, double cancoderOffset) {
-        absEncoder = new CANCoder(steerID);
+    public SwerveMod(int steerID, int driveID, double x, double y, double cancoderOffset) {
+
         steer = new CANSparkMax(steerID, MotorType.kBrushless);
         drive = new CANSparkMax(driveID, MotorType.kBrushless);
+        absEncoder = new CANCoder(steerID);
 
         pos = new Vector2(x, y);
 
         drivePID = drive.getPIDController();
         steerPID = steer.getPIDController();
 
-        //TODO TUNE PID
+        // TODO TUNE PID
 
         // drivePID.setP();
         // drivePID.setI();
@@ -54,7 +54,7 @@ public class SwerveMod {
         steerEncoder = steer.getEncoder();
         driveEncoder = drive.getEncoder();
 
-        //setting the encoders to work in radians
+        // Ensure the intergrated encoders report back in radians
         steerEncoder.setPositionConversionFactor(steerEncoder.getCountsPerRevolution() * STEERRATIO * TAU);
         driveEncoder.setPositionConversionFactor(driveEncoder.getCountsPerRevolution() * DRIVERATIO * TAU);
         steerEncoder.setVelocityConversionFactor(steerEncoder.getCountsPerRevolution() * STEERRATIO * TAU);
@@ -62,6 +62,7 @@ public class SwerveMod {
         
         drive.setInverted(true);
         steer.setInverted(false);
+
         drive.setIdleMode(IdleMode.kBrake);
         steer.setIdleMode(IdleMode.kBrake);
 
@@ -69,12 +70,13 @@ public class SwerveMod {
         absEncoder.configMagnetOffset(0);
         absEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
 
-
-        // Power Management
         // Cap off our current at 39 amps. If we go above 40 amps, the breaker will flip
         drive.setSmartCurrentLimit(39);
+        steer.setSmartCurrentLimit(39);
+
         // Enable voltage compensation to prevent variable behavior when the battery gets low/poor 
         drive.enableVoltageCompensation(12.5);
+        steer.enableVoltageCompensation(12.5);
 
         this.cancoderOffset = cancoderOffset;
 
@@ -89,47 +91,59 @@ public class SwerveMod {
         steerEncoder.setPosition(pos);
     }
     
-    /**sets the drive motor to drive */
-    void drive(double power) {
+    /**
+     * Drive the drive motor
+     * @param power Power to send to the motor, represented -1 to 1.
+     */
+    public void drive(double power) {
         drivePID.setReference(power, ControlType.kDutyCycle);
     }
 
-    /**Rotates to an angle given in radians
-     * @param desired angle in radians(0,2pi)
+    /**
+     * Rotates to an angle given in radians
+     * @param destPos desired angle in radians,
+     * clamped at (0, 2pi)
      */
-    void rotate(double destPos){
+    public void rotate(double destPos) {
+        
         double steerPosUnclamped = steerEncoder.getPosition();
-        //clamping steerPos to (0,2pi);
+
+        // Clamping steerPos to (0, 2pi);
         double steerPos = (steerPosUnclamped % TAU + 1) % TAU;
         double diff = destPos - steerPos;
-        //minimum angular displacement between pos and dest pos
+
+        //The minimum angular displacement between pos and destination pos
         double minDisp;
-        //determining the closest viable position for the motor to go to
-        if(Math.abs(diff) > 1.5 * Math.PI){
+
+        // Determine the closest viable position for the motor to go to
+        // Whether that be we make a full rotation,
+        // or we invert the motor to reach the destination faster.
+        if (Math.abs(diff) > 1.5 * Math.PI) {
             minDisp = diff - Math.signum(diff) * TAU;
-        }else if(Math.abs(diff) > 0.5 * Math.PI){
+        } else if(Math.abs(diff) > 0.5 * Math.PI) {
             inverted = !inverted;
             minDisp = diff - Math.signum(diff) * Math.PI;
-        }else{
+        } else {
             minDisp = diff;
         }
+
+        // The true destination the motor should rotate to
         double trueDest = steerPosUnclamped + minDisp;
+
         steerPID.setReference(trueDest, ControlType.kPosition);
     }
 
-    void set(Vector2 command){
+    public void setState(Vector2 command) {
         rotate(command.atan2());
         drive(command.mag());
     }
-
 
     /** Returns steer angle with reference to the front of the robot in radians */
     double getSteerAngle() {
         return steerEncoder.getPosition();
     }
-
     
-    /**returns drive velocity in ft/s */
+    /** Returns drive velocity in ft/s */
     double getDriveVelocity() {
         return driveEncoder.getVelocity() / 60 * (WHEELDIAMETER / 2.0);
     }

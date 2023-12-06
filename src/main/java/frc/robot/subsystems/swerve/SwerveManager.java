@@ -8,41 +8,58 @@ import frc.robot.utils.Vector2;
 public class SwerveManager {
     private static SwerveMod[] mods;
 
-    public static void init(){
+    public static void init() {
         double xdist = WHEELBASEWIDTH / 2.0;
         double ydist = WHEELBASELENGTH / 2.0;
+
         mods = new SwerveMod[] {
-            new SwerveMod(FLSTEERID, FLDRIVEID, -xdist, ydist, FLCANCODEROFFSET),
-            new SwerveMod(FRSTEERID, FRDRIVEID, xdist, ydist, FRCANCODEROFFSET),
-            new SwerveMod(BRSTEERID, BRDRIVEID, xdist, -ydist, BRCANCODEROFFSET),
-            new SwerveMod(BLSTEERID, BLDRIVEID, -xdist, -ydist, BLCANCODEROFFSET)
+            new SwerveMod(FLSTEERID, FLDRIVEID, -xdist, ydist, FLOFFSET),
+            new SwerveMod(FRSTEERID, FRDRIVEID, xdist, ydist, FROFFSET),
+            new SwerveMod(BRSTEERID, BRDRIVEID, xdist, -ydist, BROFFSET),
+            new SwerveMod(BLSTEERID, BLDRIVEID, -xdist, -ydist, BLOFFSET)
         };
     }
 
     /**
-     * 
+     * Rotate and drive the robot's drivetrain.
      * @param translation desired translation wrt the field
-     * @param rotation desired rotation
+     * @param rotation desired rotation of the robot
      */
-    public static void rotateAndDrive(Vector2 translation, double rotation){
+    public static void rotateAndDrive(Vector2 translation, double rotation) {
+
+        // Fetch the robot's current heading in radians
         double heading = Pigeon.getRotationRad();
-        Vector2 trans = translation.rotate(RA - heading);//wrt robot
-        Vector2[] commands = new Vector2[4];
+
+        // Multiply the translation vector against a rotation matrix
+        // to compensate for the Pigeon's heading.
+        Vector2 translated = translation.rotate(RA - heading); //wrt robot
+
+        // The desired states of the modules
+        Vector2[] moduleStates = new Vector2[4];
+
+        // The maximum output this one module can have.
+        // If any module is over, all the outputs are scaled down.
         double max = 1.0;
-        for(int i = 0; i < 4; i++){
-            Vector2 rot = mods[i].getPosition().rotate(RA).mul(rotation);//wrt robot 
-            commands[i] = rot.add(trans);
-            max = Math.max(max, commands[i].mag());
+
+        for (int i = 0; i < 4; i++) {
+            Vector2 rot = mods[i].getPosition().rotate(RA).mul(rotation); //wrt robot 
+            moduleStates[i] = rot.add(translated);
+            max = Math.max(max, moduleStates[i].mag());
         }
 
-        //scaling movement down so we don't attempt use a duty cycle over 1
-        for(int i = 0; i < 4; i++){
-            mods[i].set(commands[i].div(max));
+        // Scale the movement down to ensure we don't 
+        // attempt a Duty Cycle over 1.
+        for (int i = 0; i < 4; i++) {
+            mods[i].setState(moduleStates[i].div(max));
         }
     }
 
-    public static void brake(){
-        for(SwerveMod mod : mods){
+    /**
+     * Set the drivetrain in an "X" pattern,
+     * clamping the wheels down to prevent movement.
+     */
+    public static void brake() {
+        for (SwerveMod mod : mods) {
             mod.rotate(mod.getPosition().atan2());
             mod.drive(0);
         }
