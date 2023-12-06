@@ -11,14 +11,11 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.utils.Vector2;
 
+import static frc.robot.utils.Constants.TAU;
+import static frc.robot.utils.Constants.*;
+
 
 public class SwerveMod {
-    
-    private static final double TAU = 2 * Math.PI;
-    private static final double NEOCOUNTSPERREVOLUTION = 42;
-    private static final double DRIVERATIO = 6.12;
-    private static final double STEERRATIO = 150/7;
-    private static final double WHEELRADIUS = 2.0;//inches
 
     private CANSparkMax steer;
     private CANSparkMax drive;
@@ -58,10 +55,10 @@ public class SwerveMod {
         driveEncoder = drive.getEncoder();
 
         //setting the encoders to work in radians
-        steerEncoder.setPositionConversionFactor(NEOCOUNTSPERREVOLUTION * STEERRATIO * TAU);
-        driveEncoder.setPositionConversionFactor(NEOCOUNTSPERREVOLUTION * DRIVERATIO * TAU);
-        steerEncoder.setVelocityConversionFactor(NEOCOUNTSPERREVOLUTION * STEERRATIO * TAU);
-        driveEncoder.setVelocityConversionFactor(NEOCOUNTSPERREVOLUTION * DRIVERATIO * TAU);
+        steerEncoder.setPositionConversionFactor(steerEncoder.getCountsPerRevolution() * STEERRATIO * TAU);
+        driveEncoder.setPositionConversionFactor(driveEncoder.getCountsPerRevolution() * DRIVERATIO * TAU);
+        steerEncoder.setVelocityConversionFactor(steerEncoder.getCountsPerRevolution() * STEERRATIO * TAU);
+        driveEncoder.setVelocityConversionFactor(driveEncoder.getCountsPerRevolution() * DRIVERATIO * TAU);
         
         drive.setInverted(true);
         steer.setInverted(false);
@@ -129,6 +126,6 @@ public class SwerveMod {
     
     /**returns drive velocity in ft/s */
     double getDriveVelocity() {
-        return driveEncoder.getVelocity() / 60 * WHEELRADIUS;
+        return driveEncoder.getVelocity() / 60 * (WHEELDIAMETER / 2.0);
     }
 }
