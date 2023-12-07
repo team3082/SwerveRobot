@@ -58,9 +58,9 @@ public class SwerveMod {
         driveEncoder = drive.getEncoder();
 
         // Ensure the intergrated encoders report back in radians
-        steerEncoder.setPositionConversionFactor(STEERRATIO * TAU);//drive encoder should now give values in radians at module instead of revs at motor
-        driveEncoder.setPositionConversionFactor(DRIVERATIO * TAU * WHEELDIAMETER / 2.0);//drive encoder should now give values in linear inches instead of motor revolutions
-        driveEncoder.setVelocityConversionFactor(DRIVERATIO * TAU * WHEELDIAMETER / 2.0 / 60.0);//drive encoder should now give values in linear inches per second instead of motor RPM
+        steerEncoder.setPositionConversionFactor(TAU / STEERRATIO);//drive encoder should now give values in radians at module instead of revs at motor
+        driveEncoder.setPositionConversionFactor(TAU * WHEELDIAMETER / 2.0 / DRIVERATIO);//drive encoder should now give values in linear inches instead of motor revolutions
+        driveEncoder.setVelocityConversionFactor(TAU * WHEELDIAMETER / 2.0 / 60.0 / DRIVERATIO);//drive encoder should now give values in linear inches per second instead of motor RPM
         
         drive.setInverted(true);
         steer.setInverted(false);
