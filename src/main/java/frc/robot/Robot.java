@@ -8,46 +8,57 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.OI;
 import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.swerve.SwerveManager;
-import frc.robot.subsystems.telemetry.Telemetry;
+import frc.robot.subsystems.swerve.SwervePID;
+import frc.robot.subsystems.swerve.SwervePosition;
+import frc.robot.utilities.Math.RTime;
 
-/**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
- * project.
- */
 public class Robot extends TimedRobot {
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
+
   @Override
   public void robotInit() {
-    SwerveManager.init();
     Pigeon.init();
+    Pigeon.zero();
+    SwerveManager.init();
+    SwervePosition.init();
+    SwervePID.init();
     OI.init();
-    
-    //these need to be initiallized at the end
-    Telemetry.init();
+    Pigeon.setYaw(270);
   }
 
   @Override
   public void robotPeriodic() {
-    OI.update();
-    SwerveManager.update();
+    Pigeon.update();
+    RTime.updateAbsolute();
+  }
+ 
+  @Override
+  public void autonomousInit() {
+    RTime.init();
+    Pigeon.setYaw(270);
   }
 
   @Override
-  public void autonomousInit() {}
+  public void autonomousPeriodic() {
+    SwervePosition.update();
+    RTime.update();
+  }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousExit() {
+
+  }
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    OI.init();
+  }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    RTime.update();
+    SwervePosition.update();
+    OI.useInput();
+  }
 
   @Override
   public void disabledInit() {}

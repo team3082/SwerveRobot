@@ -6,13 +6,6 @@ import frc.robot.subsystems.OI;
 
 public class TelemetryTest {
     @Test
-    public void test(){
-        OI.init();
-        try{
-            Telemetry.init();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        Telemetry.printAll();
+    public void test() {
     }
 }

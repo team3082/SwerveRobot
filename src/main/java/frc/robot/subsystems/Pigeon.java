@@ -2,14 +2,17 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
-import frc.robot.utils.RTime;
-import frc.robot.utils.Vector3;
+import edu.wpi.first.wpilibj.RobotBase;
+import frc.robot.subsystems.swerve.SwerveManager;
+import frc.robot.utilities.Math.RTime;
 
 public class Pigeon {
 
     public static WPI_Pigeon2 pigeon;
     private static double lastRot;
-    private static double rotVel;
+    private static double deltaRot;
+
+    private static double simulatedRot = 0;
 
     public static void init() {
         pigeon = new WPI_Pigeon2(0);
@@ -17,8 +20,15 @@ public class Pigeon {
     }
 
     public static void update() {
-        rotVel = (getRotationRad() - lastRot) / RTime.deltaTime();
+        if (RobotBase.isSimulation()) {
+            simulatedRot += SwerveManager.getRotationalVelocity() * RTime.deltaTime();
+        }
+        deltaRot = (getRotationRad() - lastRot) / RTime.deltaTime();
         lastRot = getRotationRad();
+    }
+
+    public static void setSimulatedRot(double rad) {
+        simulatedRot = rad;
     }
 
     public static void zero(){
@@ -50,6 +60,9 @@ public class Pigeon {
      * @return Yaw in radians
      */
     public static double getRotationRad() {
+        if (RobotBase.isSimulation()) {
+            return simulatedRot;
+        }
         return Math.PI * pigeon.getYaw() / 180;
     }
 
@@ -68,26 +81,6 @@ public class Pigeon {
      * @return Yaw in radians
      */
     public static double getDeltaRotRad() {
-        return rotVel;
-    }
-
-    /**
-     * Returns the unit vector in the direction of the z-axis relative to the pigeon
-     * This vector is in reference to the basis vectors of the pigeon at the start of the competition
-     * @return The unit vector in the direction of the z-axis relative to the pigeon
-     */
-    public static Vector3 getKHat(){
-
-        double yaw = getRotationRad();
-        double roll = getRollRad();
-        double pitch = getPitchRad();
-
-        double x,y,z;
-
-        x = Math.cos(yaw) * Math.sin(pitch) * Math.cos(roll) + (Math.sin(yaw) * Math.sin(roll));
-        y = Math.cos(yaw) * Math.sin(roll) * -1  + (Math.sin(yaw) * Math.sin(pitch) * Math.cos(roll));
-        z = Math.cos(pitch) * Math.cos(roll);
-        return new Vector3(x,y,z);
-        
+        return deltaRot;
     }
 }
