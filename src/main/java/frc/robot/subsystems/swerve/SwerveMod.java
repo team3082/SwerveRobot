@@ -11,7 +11,6 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.utils.Vector2;
 
-import static frc.robot.utils.Constants.TAU;
 import static frc.robot.utils.Constants.*;
 
 public class SwerveMod {
@@ -23,21 +22,25 @@ public class SwerveMod {
     private final Vector2 pos;
 
     private boolean inverted;
+    private double lastSteerAngle;
+    private double steerAngle;
+    private double lastDrivePosition;
+    private double drivePosition;
 
     private final double cancoderOffset;
-
-    private SparkMaxPIDController drivePID, steerPID;
+    
+    private final SparkMaxPIDController drivePID, steerPID;
     private final RelativeEncoder steerEncoder, driveEncoder;
-
-
+    
+    
     public SwerveMod(int steerID, int driveID, double x, double y, double cancoderOffset) {
-
+        
         steer = new CANSparkMax(steerID, MotorType.kBrushless);
         drive = new CANSparkMax(driveID, MotorType.kBrushless);
         absEncoder = new CANCoder(steerID);
-
+        
         pos = new Vector2(x, y);
-
+        
         drivePID = drive.getPIDController();
         steerPID = steer.getPIDController();
 
@@ -46,23 +49,22 @@ public class SwerveMod {
         // drivePID.setP();
         // drivePID.setI();
         // drivePID.setD();
-
+        
         // steerPID.setP();
         // steerPID.setI();
         // steerPID.setD();
-
+        
         steerEncoder = steer.getEncoder();
         driveEncoder = drive.getEncoder();
 
         // Ensure the intergrated encoders report back in radians
-        steerEncoder.setPositionConversionFactor(steerEncoder.getCountsPerRevolution() * STEERRATIO * TAU);
-        driveEncoder.setPositionConversionFactor(driveEncoder.getCountsPerRevolution() * DRIVERATIO * TAU);
-        steerEncoder.setVelocityConversionFactor(steerEncoder.getCountsPerRevolution() * STEERRATIO * TAU);
-        driveEncoder.setVelocityConversionFactor(driveEncoder.getCountsPerRevolution() * DRIVERATIO * TAU);
+        steerEncoder.setPositionConversionFactor(STEERRATIO * TAU);//drive encoder should now give values in radians at module instead of revs at motor
+        driveEncoder.setPositionConversionFactor(DRIVERATIO * TAU * WHEELDIAMETER / 2.0);//drive encoder should now give values in linear inches instead of motor revolutions
+        driveEncoder.setVelocityConversionFactor(DRIVERATIO * TAU * WHEELDIAMETER / 2.0 / 60.0);//drive encoder should now give values in linear inches per second instead of motor RPM
         
         drive.setInverted(true);
         steer.setInverted(false);
-
+        
         drive.setIdleMode(IdleMode.kBrake);
         steer.setIdleMode(IdleMode.kBrake);
 
@@ -73,15 +75,15 @@ public class SwerveMod {
         // Cap off our current at 39 amps. If we go above 40 amps, the breaker will flip
         drive.setSmartCurrentLimit(39);
         steer.setSmartCurrentLimit(39);
-
+        
         // Enable voltage compensation to prevent variable behavior when the battery gets low/poor 
         drive.enableVoltageCompensation(12.5);
         steer.enableVoltageCompensation(12.5);
-
+        
         this.cancoderOffset = cancoderOffset;
-
+        
         inverted = false;
-
+        
         resetSteerSensor();
     }
 
@@ -89,6 +91,8 @@ public class SwerveMod {
         double pos = absEncoder.getAbsolutePosition() - cancoderOffset;
         pos = (pos / 360.0) * TAU;
         steerEncoder.setPosition(pos);
+        lastSteerAngle = pos;
+        steerAngle = pos;
     }
     
     /**
@@ -138,9 +142,39 @@ public class SwerveMod {
         drive(command.mag());
     }
 
+    /**
+     * call once at the start of each frame
+     */
+    void update(){
+        lastDrivePosition = drivePosition;
+        drivePosition = driveEncoder.getPosition();
+        lastSteerAngle = steerAngle;
+        steerAngle = steerEncoder.getPosition();
+    }
+
+    double getDeltaSteer() {
+        return steerAngle - lastSteerAngle;
+    }
+
+    double getDeltaDrive() {
+        return drivePosition - lastDrivePosition;
+    }
+
     /** Returns steer angle with reference to the front of the robot in radians */
     double getSteerAngle() {
-        return steerEncoder.getPosition();
+        return steerAngle;
+    }
+
+    double getDrivePosition() {
+        return drivePosition;
+    }
+
+    double getLastDrivePosition(){
+        return lastDrivePosition;
+    }
+
+    double getLastSteerAngle(){
+        return lastSteerAngle;
     }
     
     /** Returns drive velocity in ft/s */

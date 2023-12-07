@@ -31,7 +31,7 @@ public final class Constants {
     public static final double FROFFSET = 0.0;
     public static final double BLOFFSET = 0.0;
     public static final double BROFFSET = 0.0;
-    public static final double FLCANCODEROFFSET = 0.0;
+    public static final double FLCANCODEROFFSET = 0.0;//Mods should be at 0 when pointed to the right
     public static final double FRCANCODEROFFSET = 0.0;
     public static final double BLCANCODEROFFSET = 0.0;
     public static final double BRCANCODEROFFSET = 0.0;

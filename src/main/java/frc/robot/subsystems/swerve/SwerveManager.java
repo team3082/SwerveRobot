@@ -7,6 +7,7 @@ import frc.robot.utils.Vector2;
 
 public class SwerveManager {
     private static SwerveMod[] mods;
+    private static SwerveOdometry odometry;
 
     public static void init() {
         double xdist = WHEELBASEWIDTH / 2.0;
@@ -18,6 +19,14 @@ public class SwerveManager {
             new SwerveMod(BRSTEERID, BRDRIVEID, xdist, -ydist, BROFFSET),
             new SwerveMod(BLSTEERID, BLDRIVEID, -xdist, -ydist, BLOFFSET)
         };
+
+        odometry = new SwerveOdometry(mods);
+    }
+
+    public static void update(){
+        for(SwerveMod mod : mods){
+            mod.update();
+        }
     }
 
     /**

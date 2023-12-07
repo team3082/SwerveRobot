@@ -21,6 +21,16 @@ public class Vector2 {
         return new Vector2(Math.cos(theta) * r, Math.sin(theta) * r);
     }
 
+    public static Vector2 average(Vector2[] vectors){
+        if(vectors.length == 0) throw new IllegalArgumentException("Vector2 array must not be empty");
+
+        Vector2 sum = new Vector2();
+        for(Vector2 v : vectors){
+            sum.add(v);
+        }
+        return sum.div(vectors.length);
+    }
+
     /**
     * Add another vector to this one
     * @param rhs The vector on the right hand side of the equation
