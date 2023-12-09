@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.controls.ControlReference;
 import frc.robot.subsystems.swerve.SwerveManager;
+import frc.robot.subsystems.swerve.SwerveModule;
 import frc.robot.subsystems.swerve.SwervePID;
 import frc.robot.subsystems.swerve.SwervePID.PIDType;
 import frc.robot.utilities.Vector2;
@@ -46,7 +47,7 @@ public class OI {
         if (driverStick.getRawAxis(boost) > .5) kBoostCoefficient = 1;
 
         Vector2 drive = new Vector2(driverStick.getRawAxis(moveX), -driverStick.getRawAxis(moveY));
-        double rotate = RMath.smoothJoystick1(driverStick.getRawAxis(2)) * -0.3;
+        double rotate = RMath.smoothJoystick1(driverStick.getRawAxis(rotateX)) * -0.3;
 
         if (drive.mag() < 0.125)
             drive = new Vector2();
@@ -62,6 +63,12 @@ public class OI {
             }
         } else {
             PID = PIDType.NONE;
+        }
+
+        if (driverStick.getRawButton(field)) {
+            for (SwerveModule module: SwerveManager.swerveModules) {
+                module.rotate((module.pos.atan2()));
+            }
         }
 
         System.out.println("Rotate: " + rotate + " Drive: " + drive.toString());

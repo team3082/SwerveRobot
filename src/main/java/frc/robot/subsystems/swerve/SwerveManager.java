@@ -8,14 +8,14 @@ public class SwerveManager {
     /**
      * Array containing all four swerve modules.
      */
-    private static SwerveModule[] swerveModules;
+    public static SwerveModule[] swerveModules;
 
     public static void init() {
         swerveModules = new SwerveModule[] {
-            new SwerveModule(1, 2, -1, 1, 0),
-            new SwerveModule(3, 4, 1, 1, 0),
-            new SwerveModule(5, 6, 1, -1, 0),
-            new SwerveModule(7, 8, -1, -1, 0),
+            new SwerveModule(1, 2, -1, 1, 143.877 + 270),
+            new SwerveModule(3, 4, 1, 1, 266.221 + 270),
+            new SwerveModule(5, 6, 1, -1, 180.352 + 270),
+            new SwerveModule(7, 8, -1, -1, 54.229 + 270),
         };
     }
 

@@ -44,18 +44,18 @@ public class SwerveModule {
         this.driveEncoder = this.driveMotor.getEncoder();
         this.drivePID = this.driveMotor.getPIDController();
         this.drivePID.setP(0.02);
-        this.drivePID.setI(0.002);
-        this.drivePID.setD(0);
+        this.drivePID.setI(0.000);
+        this.drivePID.setD(0.01);
 
         this.steerMotor.restoreFactoryDefaults();
         this.steerEncoder = this.steerMotor.getEncoder();
         this.steerPID = this.steerMotor.getPIDController();
-        this.steerPID.setP(0.25);
-        this.steerPID.setI(0.01);
-        this.steerPID.setD(0.1);
+        this.steerPID.setP(0.02);
+        this.steerPID.setI(0.000);
+        this.steerPID.setD(0.01);
 
-        this.driveMotor.setIdleMode(IdleMode.kBrake);
-        this.steerMotor.setIdleMode(IdleMode.kBrake);
+        this.driveMotor.setIdleMode(IdleMode.kCoast);
+        this.steerMotor.setIdleMode(IdleMode.kCoast);
 
         this.absEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
         this.absEncoder.configMagnetOffset(0);
@@ -65,16 +65,24 @@ public class SwerveModule {
         this.steerEncoder.setPositionConversionFactor(42);
         this.driveEncoder.setPositionConversionFactor(42);
 
-        this.resetSteerEncoder();
+        this.steerMotor.burnFlash();
+        this.driveMotor.burnFlash();
+
+        resetSteerEncoder();
+
+        this.steerMotor.burnFlash();
+        this.driveMotor.burnFlash();
     }
 
     /**
      * Resets the steer motor's encoder to align with the CANcoder.
      */
     public void resetSteerEncoder() {
+        System.out.print(this.absEncoder.getAbsolutePosition());
         double pos = this.absEncoder.getAbsolutePosition() - this.offset;
         pos = pos / 360.0 * ticksPerRotationSteer;
         this.steerEncoder.setPosition(pos);
+        System.out.println("" + this.steerEncoder.getPositionConversionFactor());
         this.steerPID.setReference(pos, ControlType.kPosition);
     }
 
