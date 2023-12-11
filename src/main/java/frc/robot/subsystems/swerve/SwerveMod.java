@@ -9,6 +9,8 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import frc.robot.utils.RTime;
 import frc.robot.utils.Vector2;
 
 import static frc.robot.utils.Constants.*;
@@ -38,6 +40,9 @@ public class SwerveMod {
         steer = new CANSparkMax(steerID, MotorType.kBrushless);
         drive = new CANSparkMax(driveID, MotorType.kBrushless);
         absEncoder = new CANCoder(steerID);
+
+        steer.restoreFactoryDefaults();
+        drive.restoreFactoryDefaults();     
         
         pos = new Vector2(x, y);
         
@@ -46,13 +51,13 @@ public class SwerveMod {
 
         // TODO TUNE PID
 
-        // drivePID.setP();
-        // drivePID.setI();
-        // drivePID.setD();
+        drivePID.setP(PDRIVE);
+        drivePID.setI(IDRIVE);
+        drivePID.setD(DDRIVE);
         
-        // steerPID.setP();
-        // steerPID.setI();
-        // steerPID.setD();
+        steerPID.setP(PSTEER);
+        steerPID.setI(ISTEER);
+        steerPID.setD(DSTEER);
         
         steerEncoder = steer.getEncoder();
         driveEncoder = drive.getEncoder();
@@ -105,15 +110,15 @@ public class SwerveMod {
 
     /**
      * Rotates to an angle given in radians
-     * @param destPos desired angle in radians,
-     * clamped at (0, 2pi)
+     * @param destPos desired angle in radians
      */
     public void rotate(double destPos) {
-        
         double steerPosUnclamped = steerEncoder.getPosition();
 
-        // Clamping steerPos to (0, 2pi)
-        double steerPos = (steerPosUnclamped % TAU + 1) % TAU;
+        // Clamping steerPos and destPos to (0, 2pi)
+        double steerPos = (steerPosUnclamped % TAU + 1) % TAU;//goofy math because modulo is weird in java
+        destPos = (destPos % TAU + 1) % TAU;
+
         double diff = destPos - steerPos;
 
         // The minimum angular displacement between pos and destination pos
@@ -184,5 +189,46 @@ public class SwerveMod {
 
     Vector2 getPosition(){
         return pos.clone();
+    }
+
+    //SYSTEM TESTING
+
+    private boolean testing;
+    private double startTime;
+    private final double testInterval = 0.5; //how long to run the test for
+    private Runnable[] commands = {
+        () -> rotate(0),
+        () -> rotate(1 * Math.PI / 4),
+        () -> rotate(2 * Math.PI / 4),
+        () -> rotate(3 * Math.PI / 4),
+        () -> rotate(4 * Math.PI / 4),
+        () -> rotate(5 * Math.PI / 4),
+        () -> rotate(6 * Math.PI / 4),
+        () -> rotate(7 * Math.PI / 4),
+        () -> rotate(0),
+        () -> setState(new Vector2(0, 0.5)),
+        () -> setState(new Vector2(0,-0.5)),
+        () -> setState(new Vector2(0.5, 0)),
+        () -> setState(new Vector2(-0.5, 0))
+    };
+
+    // runs the above commands at the specified interval
+    /**return value of 1 indicates that the test is over */
+    public int testMod(){
+        //starting timer
+        if(!testing){
+            startTime = RTime.now();
+            testing = true;
+        }
+
+        double absTime = RTime.now() - startTime;
+
+        int index = (int) absTime;
+        if(index < commands.length){
+            commands[index].run();
+            return 0;
+        }else{
+            return 1;
+        }
     }
 }

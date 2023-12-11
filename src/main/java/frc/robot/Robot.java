@@ -9,6 +9,7 @@ import frc.robot.subsystems.OI;
 import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.swerve.SwerveManager;
 import frc.robot.subsystems.telemetry.Telemetry;
+import frc.robot.utils.RTime;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -33,8 +34,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    OI.update();
     SwerveManager.update();
+    RTime.update();
   }
 
   @Override
@@ -47,7 +48,9 @@ public class Robot extends TimedRobot {
   public void teleopInit() {}
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    OI.update();
+  }
 
   @Override
   public void disabledInit() {}
@@ -59,7 +62,9 @@ public class Robot extends TimedRobot {
   public void testInit() {}
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    SwerveManager.testMods();
+  }
 
   @Override
   public void simulationInit() {}

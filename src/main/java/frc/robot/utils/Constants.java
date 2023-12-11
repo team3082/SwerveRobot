@@ -46,4 +46,13 @@ public final class Constants {
     public static final int BLSTEERID = 0;
     public static final int BRSTEERID = 0;
 
+    //PID
+    public static final double PDRIVE = 0.0;
+    public static final double IDRIVE = 0.0;
+    public static final double DDRIVE = 0.0;
+    public static final double PSTEER = 0.0;
+    public static final double ISTEER = 0.0;
+    public static final double DSTEER = 0.0;
+
+
 }
