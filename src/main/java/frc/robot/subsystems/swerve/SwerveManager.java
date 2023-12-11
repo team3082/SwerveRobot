@@ -10,11 +10,10 @@ public class SwerveManager {
 
     public static void init() {
         swerveModules = new SwerveModule[] {
-            // FIXME: REDO SPARK MAX CAN IDs
-            new SwerveModule(1, 2, 1, -1, 180.352), // BR
-            new SwerveModule(3, 4, -1, -1, 54.229), // BL
-            new SwerveModule(5, 6, -1, 1, 143.877), // FL
-            new SwerveModule(7, 8, 1, 1, 266.221), // FR
+            new SwerveModule(5, 6, 1, -1, 180.352), // BR
+            new SwerveModule(7, 8, -1, -1, 54.229), // BL
+            new SwerveModule(1, 2, -1, 1, 143.877), // FL
+            new SwerveModule(3, 4, 1, 1, 266.221), // FR
         };
 
         SwerveKinematics.init(swerveModules);
