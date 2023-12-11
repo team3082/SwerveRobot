@@ -1,0 +1,16 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/SmartDashboard/Field View": "Field2d"
+    },
+    "windows": {
+      "/Shuffleboard/SmartDashboard/Field View": {
+        "image": "C:\\Users\\nerom\\Desktop\\2023ChargedUp\\glass-resources\\2023-field.png",
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  }
+}

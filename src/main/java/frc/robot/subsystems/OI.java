@@ -1,78 +1,64 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Joystick;
-import frc.controllermaps.XBoxOne;
+import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.swerve.SwerveManager;
-import frc.robot.subsystems.telemetry.Log;
+import frc.robot.subsystems.swerve.SwerveModule;
 import frc.robot.utils.Vector2;
-import static frc.robot.utils.Constants.*;
+import frc.robot.utils.RMath;
+import frc.controllermaps.*;
 
 public class OI {
-    private static Joystick driverStick;
-    private static final int moveX = XBoxOne.AXIS_LEFT_X;
-    private static final int moveY = XBoxOne.AXIS_LEFT_Y;
-    private static final int rotateX = XBoxOne.AXIS_RIGHT_X;
-    private static final int boost = XBoxOne.AXIS_RIGHT_TRIGGER;
-    private static final int pigeonZero = XBoxOne.BUTTON_Y;
-    private static final int driveToNode = XBoxOne.BUTTON_A;
-    private static final int parkingBrake = XBoxOne.BUTTON_B;
-    private static final int balance = XBoxOne.BUTTON_X;
-    private static final int crawl = XBoxOne.AXIS_LEFT_TRIGGER;
+    public static Joystick driverStick;
 
-    //state fields
-    @Log
-    private static boolean braking;
+    static final int moveX     = LogitechF310.AXIS_LEFT_X;
+    static final int moveY     = LogitechF310.AXIS_LEFT_Y;
+    static final int rotateX   = LogitechF310.AXIS_RIGHT_X;
+    static final int boost     = LogitechF310.AXIS_RIGHT_TRIGGER;
+    static final int slow     = LogitechF310.AXIS_LEFT_TRIGGER;
+    static final int zero      = LogitechF310.BUTTON_Y;
+    static final int lock     = LogitechF310.BUTTON_X;
+    static final int cancel    = LogitechF310.BUTTON_A;
 
+    /**
+     * Initialize OI with preset joystick ports.
+     */
     public static void init() {
         driverStick = new Joystick(0);
-        braking = false;
     }
 
-    private static double smoothInput(double input) {
-        return Math.pow(input, 2);
-    }
+    /**
+     * Instruct the robot to follow instructions from joysticks.
+     */
+    public static void useInput() {
 
-    private static void driveInput() {
-        //swerve commands before boost/crawl
-        Vector2 movementCommand = new Vector2(smoothInput(driverStick.getRawAxis(moveX)), smoothInput(driverStick.getRawAxis(moveY)));
-        double rotationCommand = smoothInput(driverStick.getRawAxis(rotateX));
-        
-        //Checking deadbands
-        if(movementCommand.mag() < DRIVETRANSDEAD) movementCommand = new Vector2();
-        if(Math.abs(rotationCommand) < DRIVEROTDEAD) rotationCommand = 0;
+        if (driverStick.getRawButton(zero)) Pigeon.zero();
 
-        double movementScale = NORMTRANSFACTOR;
-        double rotationScale = NORMROTFACTOR;
+        double kBoostCoefficient = 0.1;
 
-        //Boost
-        double boostPercent = driverStick.getRawAxis(boost);
-        if (boostPercent > BOOSTDEAD) {
-            movementScale = NORMTRANSFACTOR + (BOOSTTRANSFACTOR - NORMTRANSFACTOR) * boostPercent;
-            rotationScale = NORMTRANSFACTOR + (BOODYROTFACTOR - NORMROTFACTOR) * boostPercent;
-        } 
+        if (driverStick.getRawAxis(boost) > .5) kBoostCoefficient = 1;
 
-        //Crawl, overrides boost
-        double crawlPercent = driverStick.getRawAxis(crawl);
-        if (crawlPercent > CRAWLDEAD) {
-            movementScale = NORMTRANSFACTOR + (CRAWLTRANSFACTOR - NORMTRANSFACTOR) * crawlPercent;
-            rotationScale = NORMTRANSFACTOR + (CRAWLROTFACTOR - NORMROTFACTOR) * crawlPercent;
-        } 
+        Vector2 drive = new Vector2(driverStick.getRawAxis(moveX), -driverStick.getRawAxis(moveY));
+        double rotate = RMath.smoothJoystick1(driverStick.getRawAxis(rotateX)) * -0.3;
 
-        SwerveManager.rotateAndDrive(movementCommand.mul(movementScale), rotationCommand * rotationScale);
-    }
+        if (driverStick.getRawAxis(slow) > .5) rotate *= 0.3;
 
-    private static void brake() {
-        SwerveManager.brake();
-    }
+        if (drive.mag() < 0.125)
+            drive = new Vector2();
+        else
+            drive = RMath.smoothJoystick2(drive).mul(kBoostCoefficient);
 
-    private static void zeroPigeon() {
-        Pigeon.zero();
-    }
+        if (Math.abs(rotate) < 0.005) rotate = 0;
 
-    public static void update() {
-        if(driverStick.getRawButtonPressed(parkingBrake)) braking = !braking;
-        if(driverStick.getRawButtonPressed(pigeonZero)) zeroPigeon();
-        if(braking) brake();
-        else driveInput();
+        if (driverStick.getRawButton(lock)) {
+            for (SwerveModule module: SwerveManager.swerveModules) {
+                module.rotate((module.pos.atan2()));
+            }
+        }
+
+        System.out.println("Rotate: " + rotate + " Drive: " + drive.toString());
+
+        // Swerving and a steering! Zoom!
+        SwerveManager.setStates(drive, rotate);
     }
 }

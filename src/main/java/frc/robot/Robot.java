@@ -6,9 +6,11 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.OI;
-import frc.robot.subsystems.Pigeon;
+import frc.robot.subsystems.sensors.Pigeon;
 import frc.robot.subsystems.swerve.SwerveManager;
-import frc.robot.subsystems.telemetry.Telemetry;
+import frc.robot.subsystems.swerve.SwervePosition;
+import frc.robot.utils.RTime;
+import frc.robot.subsystems.Telemetry;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -22,32 +24,46 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
   @Override
-  public void robotInit() {
+  public void robotInit() { 
     SwerveManager.init();
     Pigeon.init();
+    Pigeon.zero();
+    SwervePosition.init();
     OI.init();
-    
-    //these need to be initiallized at the end
+    Pigeon.setYaw(270);
     Telemetry.init();
   }
 
   @Override
   public void robotPeriodic() {
-    OI.update();
-    SwerveManager.update();
+    Pigeon.update();
+    RTime.updateAbsolute();
+    Telemetry.update();
   }
 
   @Override
-  public void autonomousInit() {}
+  public void autonomousInit() {
+    RTime.init();
+    Pigeon.setYaw(270);
+  }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    SwervePosition.update();
+    RTime.update();
+  }
 
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    OI.init();
+  }
 
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    RTime.update();
+    SwervePosition.update();
+    OI.useInput();
+  }
 
   @Override
   public void disabledInit() {}
