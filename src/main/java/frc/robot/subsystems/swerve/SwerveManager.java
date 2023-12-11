@@ -66,7 +66,7 @@ public class SwerveManager {
      * @return the raw encoder position, in ticks
      */
     public static double getEncoderPos(int id) {
-        return swerveModules[id].driveMotor.getEncoder().getPosition() * 42;
+        return swerveModules[id].driveMotor.getEncoder().getPosition();
     }
 
     /**

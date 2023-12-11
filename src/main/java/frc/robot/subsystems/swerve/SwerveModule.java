@@ -64,7 +64,6 @@ public class SwerveModule {
         drivePID.setP(0);
         drivePID.setI(0);
         drivePID.setD(0);
-        driveEncoder.setVelocityConversionFactor(0);
 
         steerMotor.burnFlash();
         driveMotor.burnFlash();
@@ -110,7 +109,7 @@ public class SwerveModule {
         if (RobotBase.isSimulation())
             motorPos = simSteerAng;
         else 
-            motorPos = this.steerEncoder.getPosition() * 42;
+            motorPos = this.steerEncoder.getPosition();
 
         // The number of full rotations the motor has made
         int numRot = (int) Math.floor(motorPos / ticksPerRotationSteer);
@@ -163,11 +162,11 @@ public class SwerveModule {
             return simSteerAng / ticksPerRotationSteer * Math.PI * 2 + Math.PI / 2;
         }
 
-        return this.steerEncoder.getPosition() * 42 / ticksPerRotationSteer * Math.PI * 2;
+        return this.steerEncoder.getPosition() / ticksPerRotationSteer * Math.PI * 2;
     }
 
     public double getDrivePosition() {
-        return this.driveEncoder.getPosition() * 42 / ticksPerRotationSteer * (3*Math.PI);
+        return this.driveEncoder.getPosition() / ticksPerRotationSteer * (3*Math.PI);
     }
 
     public double getDriveVelocity() {
@@ -176,6 +175,6 @@ public class SwerveModule {
             return simDriveVel * 10 / ticksPerRotationDrive * (4 * Math.PI);
         }
 
-        return this.driveEncoder.getVelocity() * 42 * 10 / ticksPerRotationDrive * (4 * Math.PI);
+        return this.driveEncoder.getVelocity() * 10 / ticksPerRotationDrive * (4 * Math.PI);
     }
 }
