@@ -76,11 +76,10 @@ public class SwerveManager {
 
     public static int testMods(){
         int modIndex = 0;
-        if(mods[modIndex].testMod() == 1){
-            modIndex++;
-        }
-
         if(modIndex < mods.length){
+            if(mods[modIndex].testMod() == 1){
+                modIndex++;
+            }
             return 0;
         }
         return 1;
