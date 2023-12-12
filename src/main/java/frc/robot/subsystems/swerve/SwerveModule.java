@@ -31,6 +31,8 @@ public class SwerveModule {
     private double simSteerAng;
     private double simDriveVel;
 
+    private double relativeEncoderOffset;
+
     public SwerveModule(int dID, int sID, double x, double y, double cancoderOffset) {
 
         this.driveMotor = new CANSparkMax(dID, MotorType.kBrushless);
@@ -80,6 +82,7 @@ public class SwerveModule {
         double pos = absEncoder.getAbsolutePosition() - this.offset;
         pos = pos / 360.0 * ticksPerRotationSteer;
         System.out.println(pos);
+        this.relativeEncoderOffset = pos;
         steerEncoder.setPosition(pos);
     }
 
@@ -110,7 +113,14 @@ public class SwerveModule {
         if (RobotBase.isSimulation())
             motorPos = simSteerAng;
         else 
-            motorPos = this.steerEncoder.getPosition();
+            motorPos = this.steerEncoder.getPosition() + this.relativeEncoderOffset;
+            if (motorPos > 42) {
+                motorPos = motorPos - 42;
+            }
+
+            else if (motorPos < 0) {
+                motorPos = motorPos + 42;
+            }
 
         // The number of full rotations the motor has made
         int numRot = (int) Math.floor(motorPos / ticksPerRotationSteer);
