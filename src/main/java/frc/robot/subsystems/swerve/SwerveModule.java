@@ -31,13 +31,6 @@ public class SwerveModule {
     private double simSteerAng;
     private double simDriveVel;
 
-    private final SimpleMotorFeedforward feedforward =
-      new SimpleMotorFeedforward(
-          0, 
-          0, 
-          0
-        );
-
     public SwerveModule(int dID, int sID, double x, double y, double cancoderOffset) {
 
         driveMotor = new CANSparkMax(dID, MotorType.kBrushless);
@@ -55,15 +48,13 @@ public class SwerveModule {
         driveMotor.setIdleMode(IdleMode.kCoast);
         steerMotor.setIdleMode(IdleMode.kCoast);
 
-        steerMotor.restoreFactoryDefaults();
-        steerPID.setP(0);
+        steerPID.setP(0.02);
         steerPID.setI(0);
-        steerPID.setD(0);
+        steerPID.setD(0.01);
 
-        driveMotor.restoreFactoryDefaults();
-        drivePID.setP(0);
+        drivePID.setP(0.02);
         drivePID.setI(0);
-        drivePID.setD(0);
+        drivePID.setD(0.01);
 
         steerMotor.burnFlash();
         driveMotor.burnFlash();
@@ -87,7 +78,7 @@ public class SwerveModule {
 
     public void drive(double power) {
         double truePower = power * (inverted ? -1.0 : 1.0);
-        this.drivePID.setReference(truePower, ControlType.kVelocity, 0, feedforward.calculate(truePower));
+        this.drivePID.setReference(truePower, ControlType.kVelocity);
 
         simDriveVel = simMaxTicksPerSecond * power * (inverted ? -1.0 : 1.0);
     }
