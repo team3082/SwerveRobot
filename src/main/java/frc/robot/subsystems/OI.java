@@ -14,7 +14,7 @@ public class OI {
 
     static final int moveX     = ControlReference.AXIS_LEFT_X;
     static final int moveY     = ControlReference.AXIS_LEFT_Y;
-    static final int rotateX   = ControlReference.AXIS_RIGHT_X;
+    static final int rotateX   = 4;
     static final int boost     = ControlReference.AXIS_RIGHT_TRIGGER;
     static final int zero      = ControlReference.BUTTON_Y;
     static final int field     = ControlReference.BUTTON_X;
@@ -42,7 +42,7 @@ public class OI {
         if (driverStick.getRawButton(zero)) Pigeon.zero();
         if (driverStick.getRawButton(cancel)) PID = PIDType.NONE;
 
-        double kBoostCoefficient = 0.1;
+        double kBoostCoefficient = 0.3;
 
         if (driverStick.getRawAxis(boost) > .5) kBoostCoefficient = 1;
 
@@ -67,7 +67,7 @@ public class OI {
 
         if (driverStick.getRawButton(field)) {
             for (SwerveModule module: SwerveManager.swerveModules) {
-                module.rotate((module.pos.atan2()));
+                module.rotateToRad((module.pos.atan2()));
             }
         }
 

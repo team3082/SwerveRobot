@@ -58,6 +58,7 @@ public class Robot extends TimedRobot {
     RTime.update();
     SwervePosition.update();
     OI.useInput();
+    System.out.println(Pigeon.getRotationRad());
   }
 
   @Override

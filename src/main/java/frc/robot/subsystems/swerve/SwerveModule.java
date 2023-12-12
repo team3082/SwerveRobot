@@ -13,7 +13,7 @@ public class SwerveModule {
 
     // NEO's ticks per 1 rotation is 42
     // Much smaller than the Falcon's 2048... /shrug
-    private static final double ticksPerRotationSteer = 42 * (150 / 7);
+    private static final double ticksPerRotationSteer = 42 * 150 / 7;
     private static final double ticksPerRotationDrive = 42 * 6.12;
 
     public CANSparkMax driveMotor;
@@ -40,50 +40,47 @@ public class SwerveModule {
         this.pos = new Vector2(x, y);
         this.offset = cancoderOffset;
 
-        this.driveMotor.restoreFactoryDefaults();
         this.driveEncoder = this.driveMotor.getEncoder();
         this.drivePID = this.driveMotor.getPIDController();
         this.drivePID.setP(0.02);
         this.drivePID.setI(0.000);
         this.drivePID.setD(0.01);
 
-        this.steerMotor.restoreFactoryDefaults();
         this.steerEncoder = this.steerMotor.getEncoder();
         this.steerPID = this.steerMotor.getPIDController();
         this.steerPID.setP(0.02);
         this.steerPID.setI(0.000);
         this.steerPID.setD(0.01);
 
-        this.driveMotor.setIdleMode(IdleMode.kCoast);
-        this.steerMotor.setIdleMode(IdleMode.kCoast);
+        this.driveMotor.setIdleMode(IdleMode.kBrake);
+        this.steerMotor.setIdleMode(IdleMode.kBrake);
 
         this.absEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
         this.absEncoder.configMagnetOffset(0);
         this.absEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
 
-        // We need to convert to motor ticks. It's easier than refactoring to rotations.
-        this.steerEncoder.setPositionConversionFactor(42);
-        this.driveEncoder.setPositionConversionFactor(42);
+        driveMotor.setInverted(true);
+        steerMotor.setInverted(true);
 
-        this.steerMotor.burnFlash();
-        this.driveMotor.burnFlash();
+        inverted = false;
 
         resetSteerEncoder();
 
         this.steerMotor.burnFlash();
         this.driveMotor.burnFlash();
+
+        System.out.println("After: " + this.steerEncoder.getPosition());
     }
 
     /**
      * Resets the steer motor's encoder to align with the CANcoder.
      */
     public void resetSteerEncoder() {
-        System.out.print(this.absEncoder.getAbsolutePosition());
-        double pos = this.absEncoder.getAbsolutePosition() - this.offset;
+        System.out.println("Before: " + this.steerEncoder.getPosition());
+        double pos = absEncoder.getAbsolutePosition() - this.offset;
         pos = pos / 360.0 * ticksPerRotationSteer;
-        this.steerEncoder.setPosition(pos);
-        System.out.println("" + this.steerEncoder.getPositionConversionFactor());
-        this.steerPID.setReference(pos, ControlType.kPosition);
+        System.out.println(pos);
+        steerEncoder.setPosition(pos);
     }
 
     /**

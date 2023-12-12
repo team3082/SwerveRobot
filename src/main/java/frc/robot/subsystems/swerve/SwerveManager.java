@@ -12,10 +12,10 @@ public class SwerveManager {
 
     public static void init() {
         swerveModules = new SwerveModule[] {
-            new SwerveModule(1, 2, -1, 1, 143.877 + 270),
-            new SwerveModule(3, 4, 1, 1, 266.221 + 270),
-            new SwerveModule(5, 6, 1, -1, 180.352 + 270),
-            new SwerveModule(7, 8, -1, -1, 54.229 + 270),
+            new SwerveModule(5, 6, 1, -1, 167.871), // BR
+            new SwerveModule(7, 8, -1, -1, 53.262), // BL
+            new SwerveModule(1, 2, -1, 1, 121.201), // FL
+            new SwerveModule(3, 4, 1, 1, 282.129), // FR
         };
     }
 
