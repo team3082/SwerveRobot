@@ -12,13 +12,13 @@ public class VisionManager {
         };
     }
 
-    // averages out camera values
+    // averages out camera position values
     public Vector2 getPosition() {
         Vector2 position = new Vector2();
         return position;
     }
 
-    // gets the rotation of the robot, from camera data
+    // averages out camera rotation values
     public double getRotation() {
         double rotation = 0.0;
         return rotation;
