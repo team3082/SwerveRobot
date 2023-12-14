@@ -70,18 +70,14 @@ public class SwerveModule {
 
         this.steerMotor.burnFlash();
         this.driveMotor.burnFlash();
-
-        System.out.println("After: " + this.steerEncoder.getPosition());
     }
 
     /**
      * Resets the steer motor's encoder to align with the CANcoder.
      */
     public void resetSteerEncoder() {
-        System.out.println("Before: " + this.steerEncoder.getPosition());
         double pos = absEncoder.getAbsolutePosition() - this.offset;
         pos = pos / 360.0 * ticksPerRotationSteer;
-        System.out.println(pos);
         this.relativeEncoderOffset = pos;
         steerEncoder.setPosition(pos);
     }
@@ -114,13 +110,12 @@ public class SwerveModule {
             motorPos = simSteerAng;
         else 
             motorPos = this.steerEncoder.getPosition() + this.relativeEncoderOffset;
-            if (motorPos > 42) {
-                motorPos = motorPos - 42;
-            }
 
-            else if (motorPos < 0) {
-                motorPos = motorPos + 42;
-            }
+        if (motorPos > 42) {
+             motorPos = motorPos - 42;
+        } else if (motorPos < 0) {
+            motorPos = motorPos + 42;
+        }
 
         // The number of full rotations the motor has made
         int numRot = (int) Math.floor(motorPos / ticksPerRotationSteer);
