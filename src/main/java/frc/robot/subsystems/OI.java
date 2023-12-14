@@ -14,10 +14,10 @@ public class OI {
 
     static final int moveX     = ControlReference.AXIS_LEFT_X;
     static final int moveY     = ControlReference.AXIS_LEFT_Y;
-    static final int rotateX   = 4;
+    static final int rotateX   = ControlReference.AXIS_RIGHT_X;
     static final int boost     = ControlReference.AXIS_RIGHT_TRIGGER;
     static final int zero      = ControlReference.BUTTON_Y;
-    static final int field     = ControlReference.BUTTON_X;
+    static final int lock      = ControlReference.BUTTON_X;
     static final int cancel    = ControlReference.BUTTON_A;
 
     static boolean f = true;
@@ -28,7 +28,6 @@ public class OI {
      */
     public static void init() {
         driverStick = new Joystick(0);
-        PID = PIDType.NONE;
     }
 
     /**
@@ -40,7 +39,6 @@ public class OI {
     public static void useInput() {
 
         if (driverStick.getRawButton(zero)) Pigeon.zero();
-        if (driverStick.getRawButton(cancel)) PID = PIDType.NONE;
 
         double kBoostCoefficient = 0.3;
 
@@ -61,11 +59,9 @@ public class OI {
                 PID = PIDType.ROTATION;
                 SwervePID.setDestRot(Math.PI / 2.0 - Math.toRadians(POV - 180));
             }
-        } else {
-            PID = PIDType.NONE;
         }
 
-        if (driverStick.getRawButton(field)) {
+        if (driverStick.getRawButton(lock)) {
             for (SwerveModule module: SwerveManager.swerveModules) {
                 module.rotateToRad((module.pos.atan2()));
             }
