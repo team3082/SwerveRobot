@@ -4,23 +4,15 @@ import frc.robot.subsystems.Pigeon;
 import frc.robot.utils.Vector2;
 import static frc.robot.utils.Constants.RA;
 
-public class SwerveOdometry {
-    private Vector2 pos;
-    private double heading;
+public class SwerveKinematics {
     private final SwerveMod[] modules;
 
-    public SwerveOdometry(SwerveMod[] modules){
+    public SwerveKinematics(SwerveMod[] modules){
         this.modules = modules;
     }
 
-    //Set the state to a new state
-    void setState(Vector2 pos, double theta){
-        this.pos = pos;
-        this.heading = theta;
-    }
-
     /**calculates the displacement of the robot since the last frame using euler's method*/
-    Vector2 getDisplacementEulers(){
+    Vector2 getInnovationEulers(){
         Vector2[] modDisplacements = new Vector2[modules.length];//wrt robot
         for(int i = 0; i < modules.length; i++){
             modDisplacements[i] = Vector2.fromPolar(modules[i].getSteerAngle(), modules[i].getDeltaDrive());
@@ -30,8 +22,8 @@ public class SwerveOdometry {
         return averageDisplacement.rotate(Pigeon.getRotationRad() - RA);//rotating to field frame of reference
     }
 
-    /**calculates the displacement of the robot since the last frame using pose exponentiation assuming constant angular velocity*/
-    Vector2 getDisplacementExp(){
+    /**calculates the displacement of the robot since the last frame using pose exponentiation assuming constant angular velocity of both the drive and steer motors*/
+    Vector2 getInnovationExp(){
         Vector2[] modDisplacements = new Vector2[modules.length];//wrt robot
         for(int i = 0; i < modules.length; i++){
             SwerveMod mod = modules[i];
@@ -43,6 +35,4 @@ public class SwerveOdometry {
         Vector2 averageDisplacement = Vector2.average(modDisplacements);
         return averageDisplacement.rotate(Pigeon.getRotationRad() - RA);//rotating to field frame of reference
     }
-
-    
 }

@@ -3,11 +3,14 @@ package frc.robot.subsystems.swerve;
 import static frc.robot.utils.Constants.*;
 
 import frc.robot.subsystems.Pigeon;
+import frc.robot.utils.RTime;
 import frc.robot.utils.Vector2;
 
 public class SwerveManager {
     private static SwerveMod[] mods;
-    private static SwerveOdometry odometry;
+    private static SwerveKinematics kinematics;
+    private static SwerveState state;
+    private static SwerveState lastState;
 
     public static void init() {
         double xdist = WHEELBASEWIDTH / 2.0;
@@ -20,13 +23,27 @@ public class SwerveManager {
             new SwerveMod(BLSTEERID, BLDRIVEID, -xdist, -ydist, BLOFFSET)
         };
 
-        odometry = new SwerveOdometry(mods);
+        kinematics = new SwerveKinematics(mods);
+        state = new SwerveState(new Vector2(0,0), Math.PI/2);// This is temporary, if we add vision, it will be updated with vision
+        lastState = state;
     }
 
     public static void update(){
         for(SwerveMod mod : mods){
             mod.update();
         }
+
+        //updating odometry
+        lastState = state;
+        state = new SwerveState(state.pos.add(kinematics.getInnovationEulers()), Pigeon.getRotationRad());
+    }
+
+    public static Vector2 getVelocity(){
+        return state.pos.sub(lastState.pos).div(RTime.deltaTime());
+    }
+
+    public static double getAngularVelocity(){
+        return (state.heading - lastState.heading) / RTime.deltaTime();
     }
 
     /**
