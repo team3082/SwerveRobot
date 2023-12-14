@@ -29,6 +29,8 @@ public class SwerveMod {
     private double lastDrivePosition;
     private double drivePosition;
 
+    private double steerOffset;
+
     private final double cancoderOffset;
     
     private final SparkMaxPIDController drivePID, steerPID;
@@ -68,7 +70,7 @@ public class SwerveMod {
         driveEncoder.setVelocityConversionFactor(TAU * WHEELDIAMETER / 2.0 / 60.0 / DRIVERATIO);//drive encoder should now give values in linear inches per second instead of motor RPM
         
         drive.setInverted(true);
-        steer.setInverted(false);
+        steer.setInverted(true);
         
         drive.setIdleMode(IdleMode.kBrake);
         steer.setIdleMode(IdleMode.kBrake);
@@ -94,8 +96,9 @@ public class SwerveMod {
 
     private void resetSteerSensor() {
         double pos = absEncoder.getAbsolutePosition() - cancoderOffset;
-        pos = (pos / 360.0) * TAU;
-        steerEncoder.setPosition(pos);
+        pos = (pos / 360.0) * TAU;//converting from degrees to radians
+        this.steerOffset = pos - steerEncoder.getPosition();// this is the location in radians, that the relative encoder think is 0.
+        // steerEncoder.setPosition(pos);
         lastSteerAngle = pos;
         steerAngle = pos;
     }
@@ -113,7 +116,7 @@ public class SwerveMod {
      * @param destPos desired angle in radians
      */
     public void rotate(double destPos) {
-        double steerPosUnclamped = steerEncoder.getPosition();
+        double steerPosUnclamped = steerEncoder.getPosition() + steerOffset;
 
         // Clamping steerPos and destPos to (0, 2pi)
         double steerPos = (steerPosUnclamped % TAU + 1) % TAU;//goofy math because modulo is weird in java
@@ -154,7 +157,7 @@ public class SwerveMod {
         lastDrivePosition = drivePosition;
         drivePosition = driveEncoder.getPosition();
         lastSteerAngle = steerAngle;
-        steerAngle = steerEncoder.getPosition();
+        steerAngle = steerEncoder.getPosition() + steerOffset;
     }
 
     double getDeltaSteer() {
@@ -189,46 +192,5 @@ public class SwerveMod {
 
     Vector2 getPosition(){
         return pos.clone();
-    }
-
-    //SYSTEM TESTING
-
-    private boolean testing;
-    private double startTime;
-    private final double testInterval = 0.5; //how long to run the test for
-    private Runnable[] commands = {
-        () -> rotate(0),
-        () -> rotate(1 * Math.PI / 4),
-        () -> rotate(2 * Math.PI / 4),
-        () -> rotate(3 * Math.PI / 4),
-        () -> rotate(4 * Math.PI / 4),
-        () -> rotate(5 * Math.PI / 4),
-        () -> rotate(6 * Math.PI / 4),
-        () -> rotate(7 * Math.PI / 4),
-        () -> rotate(0),
-        () -> setState(new Vector2(0, 0.5)),
-        () -> setState(new Vector2(0,-0.5)),
-        () -> setState(new Vector2(0.5, 0)),
-        () -> setState(new Vector2(-0.5, 0))
-    };
-
-    // runs the above commands at the specified interval
-    /**return value of 1 indicates that the test is over */
-    public int testMod(){
-        //starting timer
-        if(!testing){
-            startTime = RTime.now();
-            testing = true;
-        }
-
-        double absTime = RTime.now() - startTime;
-
-        int index = (int) absTime;
-        if(index < commands.length){
-            commands[index].run();
-            return 0;
-        }else{
-            return 1;
-        }
     }
 }
