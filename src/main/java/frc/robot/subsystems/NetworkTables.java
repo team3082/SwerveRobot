@@ -12,6 +12,12 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.subsystems.swerve.SwervePosition;
 import frc.robot.utilities.Vector2;
 
+// Things to think about:
+// Do we want a NT instance per camera?
+// (i.e. we have a NetworkTables per Camera)?
+// Or an object of values for each camera?
+// (i.e. CameraOneData as an enum for data from Camera 1)?
+
 /**
  * Revamped Telemetry file, containing robot tracking
  * and monitoring for the Vision subsystem.
@@ -28,13 +34,10 @@ public class NetworkTables {
     private static Rotation2d prevSimRot = new Rotation2d();
 
     // Vision NetworkTables
-    /** Do we have a valid target? */
     public static NetworkTableEntry targetDetected;
-
-    /** 
-     * Placeholder
-     */
-    public static NetworkTableEntry PLACEHOLDER;
+    public static NetworkTableEntry PLACEHOLDER_X;
+    public static NetworkTableEntry PLACEHOLDER_Y;
+    public static NetworkTableEntry PLACEHOLDER_ROT;
 
     public static void init() {
 
@@ -43,10 +46,24 @@ public class NetworkTables {
         NetworkTable table = NT.getTable("ChickenVision");
 
         // Fetch values from vision and input them into the table.
-        targetDetected = table.getEntry("tv");
-        PLACEHOLDER = table.getEntry("tx");
+        targetDetected = table.getEntry("target");
+        PLACEHOLDER_X = table.getEntry("x");
+        PLACEHOLDER_Y = table.getEntry("y");
+        PLACEHOLDER_ROT = table.getEntry("rot");
         
         robotTab.add("Field View", field);
+    }
+
+    public static double getX() {
+        return PLACEHOLDER_X.getDouble(Double.MAX_VALUE);
+    }
+
+    public static double getY() {
+        return PLACEHOLDER_Y.getDouble(Double.MAX_VALUE);
+    }
+
+    public static double getRot() {
+        return PLACEHOLDER_ROT.getDouble(Double.MAX_VALUE);
     }
 
     public static void update() {
