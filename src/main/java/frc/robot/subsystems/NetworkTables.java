@@ -38,6 +38,8 @@ public class NetworkTables {
     public static NetworkTableEntry PLACEHOLDER_X;
     public static NetworkTableEntry PLACEHOLDER_Y;
     public static NetworkTableEntry PLACEHOLDER_ROT;
+    public static NetworkTableEntry PLACEHOLDER_TARGETID;
+    public static NetworkTableEntry PLACEHOLDER_VEL;
 
     public static void init() {
 
@@ -50,6 +52,8 @@ public class NetworkTables {
         PLACEHOLDER_X = table.getEntry("x");
         PLACEHOLDER_Y = table.getEntry("y");
         PLACEHOLDER_ROT = table.getEntry("rot");
+        PLACEHOLDER_TARGETID = table.getEntry("id");
+        PLACEHOLDER_VEL = table.getEntry("vel");
         
         robotTab.add("Field View", field);
     }
@@ -64,6 +68,10 @@ public class NetworkTables {
 
     public static double getRot() {
         return PLACEHOLDER_ROT.getDouble(Double.MAX_VALUE);
+    }
+
+    public static double getVel() {
+        return PLACEHOLDER_VEL.getDouble(Double.MAX_VALUE);
     }
 
     public static void update() {

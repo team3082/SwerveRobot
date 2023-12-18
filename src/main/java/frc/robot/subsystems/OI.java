@@ -20,7 +20,6 @@ public class OI {
     static final int lock      = ControlReference.BUTTON_X;
     static final int cancel    = ControlReference.BUTTON_A;
 
-    static boolean f = true;
     static PIDType PID = PIDType.NONE;
 
     /**

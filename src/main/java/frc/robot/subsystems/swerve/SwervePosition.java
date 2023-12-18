@@ -3,6 +3,7 @@ package frc.robot.subsystems.swerve;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.Pigeon;
+import frc.robot.subsystems.vision.VisionManager;
 import frc.robot.utilities.Vector2;
 import frc.robot.utilities.Math.RTime;
 
@@ -16,11 +17,7 @@ public class SwervePosition {
     private static Vector2 absVelocity;
     private static Vector2 lastAbsVelocity;
 
-    public SwervePosition() {
-        absVelocity     = new Vector2();
-        lastAbsVelocity = new Vector2();
-        position        = new Vector2();
-    }
+    private static boolean vision;
 
     public static void enableVision(){
 
@@ -34,6 +31,7 @@ public class SwervePosition {
         absVelocity     = new Vector2();
         lastAbsVelocity = new Vector2();
         position        = new Vector2();
+        vision = true;
     }
     
     public static void update() {
@@ -53,6 +51,18 @@ public class SwervePosition {
 
         // Integrate our velocity to find our position
         position = position.add(absVelocity.add(lastAbsVelocity).mul(0.5 * RTime.deltaTime()));
+
+        if (vision) {
+            Vector2 visionPos;
+            try {
+                visionPos = VisionManager.getPosition();
+            } catch (Exception e) {
+               System.out.println("VISION SWERVE BAD");
+               visionPos = new Vector2();
+            }
+
+            
+        }
     }
 
     public static void setPosition(Vector2 newPos) {

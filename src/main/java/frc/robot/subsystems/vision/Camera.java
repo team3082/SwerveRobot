@@ -20,6 +20,9 @@ public class Camera {
     /** The raw rotation data gathered from NetworkTables. */
     public double cameraRotationData;
 
+    public boolean targetDetected;
+    public int targetID;
+
     public Camera(Vector2 position, double angle, int id) {
         this.cameraPosition = position;
         this.cameraAngle = angle;
@@ -32,6 +35,8 @@ public class Camera {
     public void update() {
         cameraPositionData = new Vector2(NetworkTables.getX(), NetworkTables.getY());
         cameraRotationData = NetworkTables.getRot();
+        targetDetected = NetworkTables.targetDetected.getBoolean(false);
+        targetID = (int) NetworkTables.PLACEHOLDER_TARGETID.getDouble(0);
     }
 
     /**

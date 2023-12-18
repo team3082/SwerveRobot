@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.robot.subsystems.NetworkTables;
 import frc.robot.subsystems.OI;
 import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.swerve.SwerveManager;
@@ -23,6 +24,7 @@ public class Robot extends TimedRobot {
     SwervePID.init();
     OI.init();
     Pigeon.setYaw(270);
+    NetworkTables.init();
   }
 
   @Override
