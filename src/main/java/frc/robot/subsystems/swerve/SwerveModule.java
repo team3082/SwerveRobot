@@ -54,6 +54,9 @@ public class SwerveModule {
         this.steerPID.setI(0.000);
         this.steerPID.setD(0.01);
 
+        this.steerEncoder.setPositionConversionFactor(42);
+        this.driveEncoder.setPositionConversionFactor(42);
+
         this.driveMotor.setIdleMode(IdleMode.kBrake);
         this.steerMotor.setIdleMode(IdleMode.kBrake);
 
@@ -61,15 +64,16 @@ public class SwerveModule {
         this.absEncoder.configMagnetOffset(0);
         this.absEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Unsigned_0_to_360);
 
-        driveMotor.setInverted(true);
+        driveMotor.setInverted(false);
         steerMotor.setInverted(true);
 
         inverted = false;
 
-        resetSteerEncoder();
-
         this.steerMotor.burnFlash();
         this.driveMotor.burnFlash();
+
+        resetSteerEncoder();
+
     }
 
     /**
@@ -78,8 +82,7 @@ public class SwerveModule {
     public void resetSteerEncoder() {
         double pos = absEncoder.getAbsolutePosition() - this.offset;
         pos = pos / 360.0 * ticksPerRotationSteer;
-        this.relativeEncoderOffset = pos;
-        steerEncoder.setPosition(pos);
+        this.steerEncoder.setPosition(pos);
     }
 
     /**
@@ -109,13 +112,7 @@ public class SwerveModule {
         if (RobotBase.isSimulation())
             motorPos = simSteerAng;
         else 
-            motorPos = this.steerEncoder.getPosition() + this.relativeEncoderOffset;
-
-        if (motorPos > 42) {
-             motorPos = motorPos - 42;
-        } else if (motorPos < 0) {
-            motorPos = motorPos + 42;
-        }
+            motorPos = this.steerEncoder.getPosition();
 
         // The number of full rotations the motor has made
         int numRot = (int) Math.floor(motorPos / ticksPerRotationSteer);
