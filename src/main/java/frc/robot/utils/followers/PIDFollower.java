@@ -1,6 +1,7 @@
 package frc.robot.utils.followers;
 
 
+import frc.robot.Tuning;
 import frc.robot.subsystems.swerve.SwerveInstruction;
 import frc.robot.subsystems.swerve.SwerveState;
 import frc.robot.utils.Vector2;
@@ -22,6 +23,18 @@ public class PIDFollower extends SwerveFollower{
         this.kProt = kprot;
         this.kIrot = kirot;
         this.kDrot = kdrot;
+        this.timeScale = timeScale;
+        this.maxIntAccum = maxIntAccum;
+    }
+
+    public PIDFollower(SwerveTrajectory traj, double timeScale, double[] maxIntAccum) {
+        super(traj);
+        this.kPpos = Tuning.SWERVE_TRL_P;
+        this.kIpos = Tuning.SWERVE_TRL_I;
+        this.kDpos = Tuning.SWERVE_TRL_D;
+        this.kProt = Tuning.SWERVE_ROT_P;
+        this.kIrot = Tuning.SWERVE_ROT_I;
+        this.kDrot = Tuning.SWERVE_ROT_D;
         this.timeScale = timeScale;
         this.maxIntAccum = maxIntAccum;
     }

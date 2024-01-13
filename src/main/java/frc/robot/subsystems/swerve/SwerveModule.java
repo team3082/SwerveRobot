@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.utils.*;
+import frc.robot.Tuning;
 
 public class SwerveModule {
 
@@ -43,15 +44,27 @@ public class SwerveModule {
 
         this.driveEncoder = this.driveMotor.getEncoder();
         this.drivePID = this.driveMotor.getPIDController();
-        this.drivePID.setP(0.01);
-        this.drivePID.setI(0.0001);
-        this.drivePID.setD(0.02);
+
+        // keeping this here just in case
+        // this.drivePID.setP(0.01);
+        // this.drivePID.setI(0.0001);
+        // this.drivePID.setD(0.02);
+
+        this.drivePID.setP(Tuning.SWERVE_DRIVE_P);
+        this.drivePID.setI(Tuning.SWERVE_DRIVE_I);
+        this.drivePID.setD(Tuning.SWERVE_DRIVE_D);
 
         this.steerEncoder = this.steerMotor.getEncoder();
         this.steerPID = this.steerMotor.getPIDController();
-        this.steerPID.setP(0.02);
-        this.steerPID.setI(0.0002);
-        this.steerPID.setD(0.043);
+
+        // keeping this here just in case
+        // this.steerPID.setP(0.02);
+        // this.steerPID.setI(0.0002);
+        // this.steerPID.setD(0.043);
+
+        this.steerPID.setP(Tuning.SWERVE_STEER_P);
+        this.steerPID.setI(Tuning.SWERVE_STEER_I);
+        this.steerPID.setD(Tuning.SWERVE_STEER_D);
 
         this.driveMotor.setIdleMode(IdleMode.kBrake);
         this.steerMotor.setIdleMode(IdleMode.kBrake);
