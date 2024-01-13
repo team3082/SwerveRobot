@@ -3,24 +3,55 @@ package frc.robot.utils.trajectories;
 import frc.robot.subsystems.swerve.SwerveState;
 import frc.robot.utils.Vector2;
 
+import org.ejml.dense.block.VectorOps_DDRB;
+
+import frc.robot.subsystems.Pigeon;
+import frc.robot.subsystems.swerve.SwerveManager;
+import frc.robot.subsystems.swerve.SwervePosition;;
+
 public class BezierCurve implements SwerveTrajectory {
 
     Vector2 a, b, c, d;
+    double rotStart, rotEnd;
+    double maxRot;
+    Vector2 maxTrl;
 
-    double length;
-    double speed; // Inches / second
 
-    public BezierCurve(Vector2 a, Vector2 b, Vector2 c, Vector2 d) {
-
+    public BezierCurve(Vector2 a, Vector2 b, Vector2 c, Vector2 d, double rotStart, double rotEnd, Vector2 maxTrl, double maxRot) {
         this.a = a;
         this.b = b;
         this.c = c;
         this.d = d;
-
-        length = approxLength();
+        this.rotStart = rotStart;
+        this.rotEnd = rotEnd;
+        this.maxTrl = maxTrl;
+        this.maxRot = maxRot;
     }
 
-    public Vector2 getPoint(double t) {
+    public SwerveState get(double t) {
+        Vector2 robotPos = SwervePosition.getPosition();
+        double robotRot = Pigeon.getRotationRad();
+        double tClose = getClosestT(robotPos);
+        Vector2 txy = (getPoint(t));
+        Vector2 vectorTangent = getTangent(tClose);
+        Vector2 correctionVector2 = txy.sub(robotPos).norm().mul(0.1); // TODO make scale variable to robot distance from t
+        Vector2 movementVector = vectorTangent.add(correctionVector2).norm();
+        return new SwerveState(movementVector, this.rotEnd, this.maxTrl, this.maxRot);
+    }
+
+    public double length() {
+        return approxLength();
+    }
+
+    public SwerveState startState() {
+        return new SwerveState(this.a, this.rotStart, new Vector2(0, 0), 0.0);
+    }
+
+    public SwerveState endState() {
+        return new SwerveState(this.c, this.rotEnd, new Vector2(0, 0), 0.0);
+    }
+
+    private Vector2 getPoint(double t) {
         double x = (Math.pow(1 - t,3) * a.x) +
         (3 * Math.pow(1 - t,2) * t * b.x) +
         (3 * (1 - t) * Math.pow(t,2) * c.x) +
@@ -36,7 +67,7 @@ public class BezierCurve implements SwerveTrajectory {
         return r;
     }
 
-    public Vector2 getTangent(double t) {
+    private Vector2 getTangent(double t) {
         // get derivative of the curve
         double x = -3 * a.x * Math.pow((1 - t), 2) + 3 * b.x * (3 * Math.pow(t, 2) - 4 * t + 1) + 3 * c.x * (2 * t - 3 * Math.pow(t, 2)) + 3 * d.x * Math.pow(t, 2);
         double y = -3 * a.y * Math.pow((1 - t), 2) + 3 * b.y * (3 * Math.pow(t, 2) - 4 * t + 1) + 3 * c.y * (2 * t - 3 * Math.pow(t, 2)) + 3 * d.y * Math.pow(t, 2);
@@ -45,7 +76,7 @@ public class BezierCurve implements SwerveTrajectory {
         return vectorTangent;
     }
 
-    public double approxLength() {
+    private double approxLength() {
         int n = 100;
         double l = 0;
         Vector2 pPoint = getPoint(0);
@@ -57,7 +88,7 @@ public class BezierCurve implements SwerveTrajectory {
         return l;
     }
 
-    public double approxRemainingLength(int startingI) {
+    private double approxRemainingLength(int startingI) {
         int n = 100;
         double l = 0;
         Vector2 pPoint = getPoint(0);
@@ -69,7 +100,7 @@ public class BezierCurve implements SwerveTrajectory {
         return l;
     }
 
-    public double getClosestT(Vector2 robotPos) {
+    private double getClosestT(Vector2 robotPos) {
         int n = 100;
         double t = 0;
         double distance;
@@ -92,31 +123,5 @@ public class BezierCurve implements SwerveTrajectory {
         }
         System.out.println("distance from t: " + smallestDistance + " closest value t: " + t);
         return t;
-    }
-
-    @Override
-    public SwerveState get(double t) {
-        return null;
-    }
-
-    @Override
-    public double length() {
-        return 0;
-    }
-
-    @Override
-    public SwerveState startState() {
-        return null;
-    }
-
-    @Override
-    public SwerveState endState() {
-        Vector2 pos = new Vector2(0, 0);
-        Vector2 dpos = new Vector2(0, 0);
-        // placeholder
-        double theta = 0;
-        double dtheta = 0;
-        SwerveState state = new SwerveState(pos, theta, dpos, dtheta);
-        return null;
     }
 }

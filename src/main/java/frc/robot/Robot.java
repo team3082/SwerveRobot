@@ -46,10 +46,6 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     RTime.init();
     Pigeon.setYaw(270);
-    SwervePosition.setPosition(new Vector2(15.5, -292));
-    trajectory = new BezierCurve(new Vector2(15.5, -292), new Vector2(67, -234.5), new Vector2(-41.6, -292), new Vector2(23.7, -238));
-    trajectoryPID = new PIDController(0.05, 0, 0, 1, 1, 0.25);
-    trajectoryPID.setDest(trajectory.approxLength());
   }
 
   double t;
@@ -59,17 +55,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     SwervePosition.update();
-    System.out.println("SwervePosition: " + SwervePosition.getPosition().toString());
     RTime.update();
-    t = trajectory.getClosestT(SwervePosition.getPosition());
-    txy = trajectory.getPoint(t);
-    movementVector = trajectory.getTangent(t);
-    //movementVector.add(txy.sub(SwervePosition.getPosition()));
-    movementVector.norm();
-    translationSpeed = trajectoryPID.updateOutput((trajectoryPID.getDest() - trajectory.approxRemainingLength((int) t * 100)));
-    SwerveManager.rotateAndDrive(0, movementVector.mul(translationSpeed));
-
-    System.out.println("Movement speed: " + translationSpeed + ", T: " + t + " MovementVector: " + movementVector);
   }
 
   @Override
