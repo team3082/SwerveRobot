@@ -17,15 +17,8 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj.util.Color8Bit;
-import edu.wpi.first.wpilibj.DataLogManager;
 import frc.robot.subsystems.swerve.SwervePID;
 import frc.robot.subsystems.swerve.SwervePosition;
-import frc.robot.utils.RTime;
 import frc.robot.utils.Vector2;
 
 import edu.wpi.first.wpilibj.RobotBase;
@@ -80,9 +73,6 @@ public class Telemetry {
     private static final ShuffleboardTab pigeonTab = Shuffleboard.getTab("Pigeon");
     private static final ShuffleboardTab moveTab = Shuffleboard.getTab("Move PID");
     private static final ShuffleboardTab rotTab = Shuffleboard.getTab("Rot PID");
-    private static final ShuffleboardTab shldrPID = Shuffleboard.getTab("Shoulder PID");
-    private static final ShuffleboardTab elbowPID = Shuffleboard.getTab("Elbow PID");
-    private static final ShuffleboardTab affTuning = Shuffleboard.getTab("AFF Values");
     private static final ShuffleboardTab pos = Shuffleboard.getTab("Positions");
     private static final ShuffleboardTab temps = Shuffleboard.getTab("Temperatures");
     private static final ShuffleboardTab power = Shuffleboard.getTab("Power Values");

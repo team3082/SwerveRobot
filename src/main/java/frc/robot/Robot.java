@@ -5,7 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.subsystems.NetworkTables;
 import frc.robot.subsystems.OI;
 import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.Telemetry;

@@ -3,10 +3,6 @@ package frc.robot.utils.trajectories;
 import frc.robot.subsystems.swerve.SwerveState;
 import frc.robot.utils.Vector2;
 
-import org.ejml.dense.block.VectorOps_DDRB;
-
-import frc.robot.subsystems.Pigeon;
-import frc.robot.subsystems.swerve.SwerveManager;
 import frc.robot.subsystems.swerve.SwervePosition;;
 
 public class BezierCurve implements SwerveTrajectory {
@@ -15,7 +11,7 @@ public class BezierCurve implements SwerveTrajectory {
     double rotStart, rotEnd;
     double maxRot;
     Vector2 maxTrl;
-
+    double length;
 
     public BezierCurve(Vector2 a, Vector2 b, Vector2 c, Vector2 d, double rotStart, double rotEnd, Vector2 maxTrl, double maxRot) {
         this.a = a;
@@ -26,11 +22,12 @@ public class BezierCurve implements SwerveTrajectory {
         this.rotEnd = rotEnd;
         this.maxTrl = maxTrl;
         this.maxRot = maxRot;
+
+        this.length = approxLength();
     }
 
     public SwerveState get(double t) {
         Vector2 robotPos = SwervePosition.getPosition();
-        double robotRot = Pigeon.getRotationRad();
         double tClose = getClosestT(robotPos);
         Vector2 txy = (getPoint(t));
         Vector2 vectorTangent = getTangent(tClose);
@@ -40,7 +37,7 @@ public class BezierCurve implements SwerveTrajectory {
     }
 
     public double length() {
-        return approxLength();
+        return this.length;
     }
 
     public SwerveState startState() {
