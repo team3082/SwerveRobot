@@ -1,7 +1,7 @@
 package frc.robot.subsystems.swerve;
 
-import frc.robot.utilities.Math.RMath;
-import frc.robot.utilities.Vector2;
+import frc.robot.utils.RMath;
+import frc.robot.utils.Vector2;
 
 public class SwerveState {
     //position of the robot in inches

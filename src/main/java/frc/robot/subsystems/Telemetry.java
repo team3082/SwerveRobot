@@ -25,8 +25,8 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj.DataLogManager;
 import frc.robot.subsystems.swerve.SwervePID;
 import frc.robot.subsystems.swerve.SwervePosition;
-import frc.robot.utilities.Math.RTime;
-import frc.robot.utilities.Vector2;
+import frc.robot.utils.RTime;
+import frc.robot.utils.Vector2;
 
 import edu.wpi.first.wpilibj.RobotBase;
 
@@ -94,7 +94,7 @@ public class Telemetry {
 
     // Field position
     private static final Field2d field = new Field2d();
-    private static frc.robot.utilities.Vector2 prevSimPos = new Vector2();
+    private static frc.robot.utils.Vector2 prevSimPos = new Vector2();
     private static Rotation2d prevSimRot = new Rotation2d();
 
     // Move PID
@@ -167,7 +167,7 @@ public class Telemetry {
 
         if (RobotBase.isSimulation()) {
             // Allow the user to drag the robot around if we're in simulation mode
-            Vector2 modifiedSimPos = new frc.robot.utilities.Vector2(field.getRobotPose().getX(), field.getRobotPose().getY());
+            Vector2 modifiedSimPos = new frc.robot.utils.Vector2(field.getRobotPose().getX(), field.getRobotPose().getY());
             if (prevSimPos.sub(modifiedSimPos).mag() > 0.001) {
                 Vector2 modifiedSwervePos = modifiedSimPos
                         .div(IN_TO_M)

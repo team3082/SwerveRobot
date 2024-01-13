@@ -12,10 +12,10 @@ import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.swerve.SwerveManager;
 import frc.robot.subsystems.swerve.SwervePID;
 import frc.robot.subsystems.swerve.SwervePosition;
-import frc.robot.utilities.Vector2;
-import frc.robot.utilities.Math.RTime;
-import frc.robot.utilities.trajectories.BezierCurve;
-import frc.robot.utilities.PIDController;
+import frc.robot.utils.PIDController;
+import frc.robot.utils.Vector2;
+import frc.robot.utils.RTime;
+import frc.robot.utils.trajectories.BezierCurve;
 
 public class Robot extends TimedRobot {
 

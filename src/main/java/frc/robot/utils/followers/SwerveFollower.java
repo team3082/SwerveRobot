@@ -1,8 +1,8 @@
-package frc.robot.utilities.followers;
+package frc.robot.utils.followers;
 
 import frc.robot.subsystems.swerve.SwerveInstruction;
 import frc.robot.subsystems.swerve.SwerveState;
-import frc.robot.utilities.trajectories.SwerveTrajectory;
+import frc.robot.utils.trajectories.SwerveTrajectory;
 
 public abstract class SwerveFollower {
     public final SwerveTrajectory path;

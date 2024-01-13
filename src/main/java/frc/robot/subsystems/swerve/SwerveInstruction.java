@@ -1,6 +1,6 @@
 package frc.robot.subsystems.swerve;
 
-import frc.robot.utilities.Vector2;
+import frc.robot.utils.Vector2;
 
 public class SwerveInstruction {
     

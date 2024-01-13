@@ -2,7 +2,7 @@ package frc.robot.subsystems.vision;
 
 import frc.robot.subsystems.NetworkTables;
 import frc.robot.subsystems.Pigeon;
-import frc.robot.utilities.Vector2;
+import frc.robot.utils.Vector2;
 
 public class PieceDetector {
     

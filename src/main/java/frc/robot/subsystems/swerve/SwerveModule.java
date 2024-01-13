@@ -7,7 +7,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.RobotBase;
-import frc.robot.utilities.*;
+import frc.robot.utils.*;
 
 public class SwerveModule {
 

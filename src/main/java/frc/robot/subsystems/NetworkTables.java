@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import frc.robot.subsystems.swerve.SwervePosition;
-import frc.robot.utilities.Vector2;
+import frc.robot.utils.Vector2;
 
 // Things to think about:
 // Do we want a NT instance per camera?

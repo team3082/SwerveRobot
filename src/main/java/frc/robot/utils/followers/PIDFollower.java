@@ -1,11 +1,11 @@
-package frc.robot.utilities.followers;
+package frc.robot.utils.followers;
 
 
 import frc.robot.subsystems.swerve.SwerveInstruction;
 import frc.robot.subsystems.swerve.SwerveState;
-import frc.robot.utilities.Math.RMath;
-import frc.robot.utilities.Vector2;
-import frc.robot.utilities.trajectories.SwerveTrajectory;
+import frc.robot.utils.Vector2;
+import frc.robot.utils.RMath;
+import frc.robot.utils.trajectories.SwerveTrajectory;
 
 public class PIDFollower extends SwerveFollower{
     double kPpos, kIpos,kDpos;

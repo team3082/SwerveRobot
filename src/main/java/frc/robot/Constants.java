@@ -1,6 +1,6 @@
 package frc.robot;
 
-import frc.robot.utilities.Vector2;
+import frc.robot.utils.Vector2;
 
 public class Constants {
     // Vision

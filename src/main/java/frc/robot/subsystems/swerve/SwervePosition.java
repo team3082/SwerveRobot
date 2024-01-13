@@ -4,8 +4,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.vision.VisionManager;
-import frc.robot.utilities.Vector2;
-import frc.robot.utilities.Math.RTime;
+import frc.robot.utils.Vector2;
+import frc.robot.utils.RTime;
 
 public class SwervePosition {
 

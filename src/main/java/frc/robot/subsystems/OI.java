@@ -6,8 +6,8 @@ import frc.robot.subsystems.swerve.SwerveManager;
 import frc.robot.subsystems.swerve.SwerveModule;
 import frc.robot.subsystems.swerve.SwervePID;
 import frc.robot.subsystems.swerve.SwervePID.PIDType;
-import frc.robot.utilities.Vector2;
-import frc.robot.utilities.Math.RMath;
+import frc.robot.utils.Vector2;
+import frc.robot.utils.RMath;
 
 public class OI {
     public static Joystick driverStick;

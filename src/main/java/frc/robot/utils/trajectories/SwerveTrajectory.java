@@ -1,4 +1,4 @@
-package frc.robot.utilities.trajectories;
+package frc.robot.utils.trajectories;
 
 import frc.robot.subsystems.swerve.SwerveState;
 

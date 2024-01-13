@@ -1,8 +1,8 @@
-package frc.robot.utilities.trajectories;
+package frc.robot.utils.trajectories;
 
 import frc.robot.subsystems.swerve.SwerveState;
-import frc.robot.utilities.Math.RMath;
-import frc.robot.utilities.Vector2;
+import frc.robot.utils.Vector2;
+import frc.robot.utils.RMath;
 
 public class LinearSpline implements SwerveTrajectory{
 
