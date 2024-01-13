@@ -1,0 +1,26 @@
+{
+  "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        "open": true
+      }
+    },
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Pigeon/Pigeon": "Gyro",
+      "/Shuffleboard/SmartDashboard/Field View": "Field2d"
+    },
+    "windows": {
+      "/Shuffleboard/SmartDashboard/Field View": {
+        "image": "C:\\Dev\\SwerveRobot\\glass-resources\\Crescendo4K.PNG",
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables Settings": {
+    "mode": "Client (NT4)",
+    "serverTeam": "3082"
+  }
+}

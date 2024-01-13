@@ -14,7 +14,6 @@ public class SwerveModule {
     // NEO's ticks per 1 rotation is 42
     // Much smaller than the Falcon's 2048... /shrug
     private static final double ticksPerRotationSteer = 42 * 150 / 7;
-    private static final double ticksPerRotationDrive = 42 * 6.12;
 
     public CANSparkMax driveMotor;
     public CANSparkMax steerMotor;
@@ -44,21 +43,21 @@ public class SwerveModule {
 
         this.driveEncoder = this.driveMotor.getEncoder();
         this.drivePID = this.driveMotor.getPIDController();
-        this.drivePID.setP(0.02);
-        this.drivePID.setI(0.000);
-        this.drivePID.setD(0.01);
+        this.drivePID.setP(0.01);
+        this.drivePID.setI(0.0001);
+        this.drivePID.setD(0.02);
 
         this.steerEncoder = this.steerMotor.getEncoder();
         this.steerPID = this.steerMotor.getPIDController();
         this.steerPID.setP(0.02);
-        this.steerPID.setI(0.000);
-        this.steerPID.setD(0.01);
-
-        this.steerEncoder.setPositionConversionFactor(42);
-        this.driveEncoder.setPositionConversionFactor(42);
+        this.steerPID.setI(0.0002);
+        this.steerPID.setD(0.043);
 
         this.driveMotor.setIdleMode(IdleMode.kBrake);
         this.steerMotor.setIdleMode(IdleMode.kBrake);
+
+        this.driveEncoder.setVelocityConversionFactor(6.12);
+        this.steerEncoder.setPositionConversionFactor(42);
 
         this.absEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
         this.absEncoder.configMagnetOffset(0);
@@ -68,6 +67,13 @@ public class SwerveModule {
         steerMotor.setInverted(true);
 
         inverted = false;
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         this.steerMotor.burnFlash();
         this.driveMotor.burnFlash();
@@ -170,9 +176,9 @@ public class SwerveModule {
     public double getDriveVelocity() {
 
         if (RobotBase.isSimulation()) {
-            return simDriveVel * 10 / ticksPerRotationDrive * (4 * Math.PI);
+            return simDriveVel * 10 * (4 * Math.PI);//TODO wierd
         }
 
-        return this.driveEncoder.getVelocity() * 10 / ticksPerRotationDrive * (4 * Math.PI);
+        return (this.driveEncoder.getVelocity() * (2 * Math.PI * 2)) / 60;
     }
 }

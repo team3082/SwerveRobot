@@ -63,4 +63,7 @@ public class RMath {
         mag = mag * mag;
         return dir.norm().mul(mag);
     }
+    public static double clamp(double in, double min, double max){
+        return Math.min(Math.max(in, min), max);
+    }
 }

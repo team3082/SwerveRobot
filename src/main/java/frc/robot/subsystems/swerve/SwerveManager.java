@@ -17,6 +17,7 @@ public class SwerveManager {
             new SwerveModule(1, 2, -1, 1, 249.521), // FL
             new SwerveModule(3, 4, 1, 1, 208.213), // FR
         };
+       swerveModules[0].driveMotor.setInverted(true);
     }
 
     /**
@@ -147,7 +148,7 @@ public class SwerveManager {
         Vector2 velSum = new Vector2();
 
         for (SwerveModule mod : swerveModules) {
-            velSum = velSum.add(Vector2.fromPolar(mod.getSteerAngle(), mod.getDriveVelocity()));
+            velSum = velSum.add(Vector2.fromPolar(mod.getSteerAngle(), mod.getDriveVelocity())).div(50);
         }
 
         return velSum.div(swerveModules.length);
