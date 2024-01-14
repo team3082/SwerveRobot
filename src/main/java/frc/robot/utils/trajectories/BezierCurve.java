@@ -26,6 +26,8 @@ public class BezierCurve implements SwerveTrajectory {
         this.length = approxLength();
     }
 
+    // public BezierCurve(String PathFile) {}
+    
     public SwerveState get(double t) {
         Vector2 robotPos = SwervePosition.getPosition();
         double tClose = getClosestT(robotPos);

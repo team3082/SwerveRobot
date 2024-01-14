@@ -39,18 +39,12 @@ public class Robot extends TimedRobot {
     Telemetry.update(false);
   }
  
-  BezierCurve trajectory;
-  PIDController trajectoryPID;
   @Override
   public void autonomousInit() {
     RTime.init();
     Pigeon.setYaw(270);
   }
 
-  double t;
-  double translationSpeed;
-  Vector2 txy;
-  Vector2 movementVector;
   @Override
   public void autonomousPeriodic() {
     SwervePosition.update();
