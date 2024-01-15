@@ -71,8 +71,9 @@ public class Robot extends TimedRobot {
     movementVector = trajectory.getTangent(t);
     movementVector = movementVector.norm();
     translationSpeed = trajectoryPID.updateOutput(t);
-    rotSpeed = rotPID.updateOutput(Pigeon.getRotationRad());
-    SwerveManager.rotateAndDrive(rotSpeed * 0.05, movementVector.mul(translationSpeed * 0.05));
+    // rotSpeed = rotPID.updateOutput(Pigeon.getRotationRad());
+    SwervePID.setDestRot(trajectory.rotEnd);
+    SwerveManager.rotateAndDrive(SwervePID.updateOutputRot(), movementVector.mul(translationSpeed * 0.05));
     System.out.println(" desired angle: " + trajectory.rotEnd + " currentAngle: " + Pigeon.getRotationRad() + " rotSpeed: " + rotSpeed);
     // System.out.println("Current t: " + t + " Current Error: " + trajectoryPID.getError() + "Percent Speed: " + translationSpeed);
     // System.out.println("Movement Vector: " + movementVector.norm() + " Swerve Position: " + SwervePosition.getPosition());
