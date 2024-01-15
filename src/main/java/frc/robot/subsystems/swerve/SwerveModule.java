@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.utils.*;
+import frc.robot.Constants;
 import frc.robot.Tuning;
 
 public class SwerveModule {
@@ -15,6 +16,7 @@ public class SwerveModule {
     // NEO's ticks per 1 rotation is 42
     // Much smaller than the Falcon's 2048... /shrug
     private static final double ticksPerRotationSteer = 42 * 150 / 7;
+    private static final double ticksPerRotationDrive = 42 * 6.12;
 
     public CANSparkMax driveMotor;
     public CANSparkMax steerMotor;
@@ -31,8 +33,6 @@ public class SwerveModule {
     private double simSteerAng;
     private double simDriveVel;
 
-    private double relativeEncoderOffset;
-
     public SwerveModule(int dID, int sID, double x, double y, double cancoderOffset) {
 
         this.driveMotor = new CANSparkMax(dID, MotorType.kBrushless);
@@ -45,22 +45,12 @@ public class SwerveModule {
         this.driveEncoder = this.driveMotor.getEncoder();
         this.drivePID = this.driveMotor.getPIDController();
 
-        // keeping this here just in case
-        // this.drivePID.setP(0.01);
-        // this.drivePID.setI(0.0001);
-        // this.drivePID.setD(0.02);
-
         this.drivePID.setP(Tuning.SWERVE_DRIVE_P);
         this.drivePID.setI(Tuning.SWERVE_DRIVE_I);
         this.drivePID.setD(Tuning.SWERVE_DRIVE_D);
 
         this.steerEncoder = this.steerMotor.getEncoder();
         this.steerPID = this.steerMotor.getPIDController();
-
-        // keeping this here just in case
-        // this.steerPID.setP(0.02);
-        // this.steerPID.setI(0.0002);
-        // this.steerPID.setD(0.043);
 
         this.steerPID.setP(Tuning.SWERVE_STEER_P);
         this.steerPID.setI(Tuning.SWERVE_STEER_I);
@@ -69,8 +59,11 @@ public class SwerveModule {
         this.driveMotor.setIdleMode(IdleMode.kBrake);
         this.steerMotor.setIdleMode(IdleMode.kBrake);
 
-        this.driveEncoder.setVelocityConversionFactor(6.12);
+        this.driveEncoder.setPositionConversionFactor(42);
+        this.driveEncoder.setVelocityConversionFactor(Constants.driveVelFactor);
+
         this.steerEncoder.setPositionConversionFactor(42);
+        this.steerEncoder.setVelocityConversionFactor(Constants.turnVelFactor);
 
         this.absEncoder.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
         this.absEncoder.configMagnetOffset(0);
@@ -82,14 +75,19 @@ public class SwerveModule {
         inverted = false;
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
         this.steerMotor.burnFlash();
         this.driveMotor.burnFlash();
+
+        try {
+            Thread.sleep(1500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         resetSteerEncoder();
 
@@ -183,15 +181,18 @@ public class SwerveModule {
     }
 
     public double getDrivePosition() {
-        return this.driveEncoder.getPosition() / ticksPerRotationSteer * (3*Math.PI);
+        return this.driveEncoder.getPosition() / ticksPerRotationSteer * (3 * Math.PI);
     }
 
+    /**
+     * Returns the drive velocity in inches per second.
+     */
     public double getDriveVelocity() {
 
         if (RobotBase.isSimulation()) {
-            return simDriveVel * 10 * (4 * Math.PI);//TODO wierd
+            return simDriveVel * 10 / ticksPerRotationDrive * (4 * Math.PI);
         }
 
-        return (this.driveEncoder.getVelocity() * (2 * Math.PI * 2)) / 60;
+        return this.driveEncoder.getVelocity();
     }
 }

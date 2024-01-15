@@ -17,4 +17,13 @@ public class Constants {
     public static final double gridY    = -285.16;
     public static final double loadingX = -107.94;
     public static final double loadingY = -311.35;
+
+    public static final double wheelDiameter = 4;
+    public static final double freeSpeedRPM = 5676;
+
+    // Inches per second
+    public static final double driveVelFactor = ((wheelDiameter * Math.PI) / 6.12) / 60;
+
+    // Radians per second
+    public static final double turnVelFactor = (2 * Math.PI) / 60.0;
 }
