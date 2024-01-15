@@ -7,7 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.OI;
 import frc.robot.subsystems.Pigeon;
-import frc.robot.subsystems.NetworkTables;
+import frc.robot.subsystems.Telemetry;
 import frc.robot.subsystems.swerve.SwerveManager;
 import frc.robot.subsystems.swerve.SwervePID;
 import frc.robot.subsystems.swerve.SwervePosition;
@@ -18,6 +18,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+
     Pigeon.init();
     Pigeon.zero();
     SwerveManager.init();
@@ -25,8 +26,7 @@ public class Robot extends TimedRobot {
     SwervePID.init();
     OI.init();
     Pigeon.setYaw(270);
-    //NetworkTables.init();
-    NetworkTables.init();
+    Telemetry.init();
     SwervePosition.setPosition(new Vector2());
   }
 
@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     Pigeon.update();
     RTime.updateAbsolute();
-    NetworkTables.update();
+    Telemetry.update(false);
   }
  
   @Override

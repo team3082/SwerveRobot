@@ -1,7 +1,6 @@
 package frc.robot.utils;
 
 import edu.wpi.first.wpilibj.Timer;
-import frc.robot.Robot;
 
 public class RTime {
 
@@ -64,7 +63,7 @@ public class RTime {
     public static double deltaTime() {
         // TODO: Check if true time or period has better results
         //return m_deltatime;
-        return Robot.kDefaultPeriod;
+        return 0.02;
     }
 
 

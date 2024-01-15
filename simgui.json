@@ -1,0 +1,26 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Pigeon/Pigeon": "Gyro",
+      "/Shuffleboard/SmartDashboard/Field View": "Field2d"
+    },
+    "windows": {
+      "/Shuffleboard/SmartDashboard/Field View": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
+    "transitory": {
+      "Shuffleboard": {
+        "open": true
+      }
+    }
+  }
+}

@@ -1,5 +1,7 @@
 package frc.robot.subsystems.swerve;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.subsystems.Pigeon;
 import frc.robot.utils.*;
 
@@ -152,5 +154,14 @@ public class SwerveManager {
         }
 
         return velSum.div(swerveModules.length);
+    }
+
+    public static SwerveModuleState[] returnStates() {
+        return new SwerveModuleState[] {
+            new SwerveModuleState(swerveModules[0].getDriveVelocity(), Rotation2d.fromRadians(swerveModules[0].getSteerAngle())),
+            new SwerveModuleState(swerveModules[1].getDriveVelocity(), Rotation2d.fromRadians(swerveModules[1].getSteerAngle())),
+            new SwerveModuleState(swerveModules[2].getDriveVelocity(), Rotation2d.fromRadians(swerveModules[2].getSteerAngle())),
+            new SwerveModuleState(swerveModules[3].getDriveVelocity(), Rotation2d.fromRadians(swerveModules[3].getSteerAngle()))
+        };
     }
 }

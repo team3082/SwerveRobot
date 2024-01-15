@@ -1,5 +1,8 @@
 package frc.robot.subsystems.swerve;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.Pigeon;
@@ -15,7 +18,6 @@ public class SwervePosition {
     private static Vector2 position;
     private static Vector2 absVelocity;
     private static Vector2 lastAbsVelocity;
-
 
     public static void init() {
         absVelocity     = new Vector2();
@@ -48,5 +50,9 @@ public class SwervePosition {
 
     public static Vector2 getPosition() {
         return position;
+    }
+
+    public static Pose2d getPose() {
+        return new Pose2d(new Translation2d(position.x, position.y), Rotation2d.fromRadians(Pigeon.getRotationRad()));
     }
 }

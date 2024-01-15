@@ -1,11 +1,12 @@
 package frc.robot.subsystems.swerve;
-
 import com.ctre.phoenix.sensors.*;
 import com.revrobotics.*;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.utils.*;
 import frc.robot.Constants;
@@ -194,5 +195,9 @@ public class SwerveModule {
         }
 
         return this.driveEncoder.getVelocity();
+    }
+
+    public SwerveModuleState getState() {
+        return new SwerveModuleState(getDriveVelocity(), Rotation2d.fromRadians(getSteerAngle()));
     }
 }
