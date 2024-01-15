@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.utils.PIDController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.OI;
 import frc.robot.subsystems.Pigeon;
@@ -12,6 +13,7 @@ import frc.robot.subsystems.swerve.SwerveManager;
 import frc.robot.subsystems.swerve.SwervePID;
 import frc.robot.subsystems.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
+import frc.robot.utils.trajectories.BezierCurve;
 import frc.robot.utils.RTime;
 
 public class Robot extends TimedRobot {
@@ -37,16 +39,43 @@ public class Robot extends TimedRobot {
     Telemetry.update(false);
   }
  
+  BezierCurve trajectory;
+  PIDController trajectoryPID;
+  PIDController rotPID;
   @Override
   public void autonomousInit() {
     RTime.init();
     Pigeon.setYaw(270);
+    trajectory = new BezierCurve(new Vector2(33, -149), new Vector2(101.6, -106), new Vector2(-87.5, -67), new Vector2(-17, -26), 0.0, 1, new Vector2(1, 1), 1.0);
+    trajectoryPID = new PIDController(0.1, 0.001, 0.03, 1.0, 1.0, 0.25);
+    trajectoryPID.setDest(1);
+    rotPID = new PIDController(0.1, 0.001, 0.03, 1.0, 1.0, 0.0005);
+    rotPID.setDest(trajectory.rotEnd);
+    SwervePosition.setPosition(trajectory.a);
+    Pigeon.setYaw(Math.toDegrees(trajectory.rotStart));
+    System.out.println(trajectoryPID.getDest());
   }
 
+
+  double t;
+  double translationSpeed;
+  double rotSpeed;
+  Vector2 txy;
+  Vector2 movementVector;
   @Override
   public void autonomousPeriodic() {
     SwervePosition.update();
     RTime.update();
+    t = trajectory.getClosestT(SwervePosition.getPosition());
+    txy = trajectory.getPoint(t);
+    movementVector = trajectory.getTangent(t);
+    movementVector = movementVector.norm();
+    translationSpeed = trajectoryPID.updateOutput(t);
+    rotSpeed = rotPID.updateOutput(Pigeon.getRotationRad());
+    SwerveManager.rotateAndDrive(rotSpeed * 0.05, movementVector.mul(translationSpeed * 0.05));
+    System.out.println(" desired angle: " + trajectory.rotEnd + " currentAngle: " + Pigeon.getRotationRad() + " rotSpeed: " + rotSpeed);
+    // System.out.println("Current t: " + t + " Current Error: " + trajectoryPID.getError() + "Percent Speed: " + translationSpeed);
+    // System.out.println("Movement Vector: " + movementVector.norm() + " Swerve Position: " + SwervePosition.getPosition());
   }
 
   @Override
@@ -82,7 +111,9 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {}
 
   @Override
-  public void simulationInit() {}
+  public void simulationInit() {
+    
+  }
 
   @Override
   public void simulationPeriodic() {}

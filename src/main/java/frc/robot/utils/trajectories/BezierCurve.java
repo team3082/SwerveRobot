@@ -2,13 +2,16 @@ package frc.robot.utils.trajectories;
 
 import frc.robot.subsystems.swerve.SwerveState;
 import frc.robot.utils.Vector2;
-
+import edu.wpi.first.math.trajectory.Trajectory;
 import frc.robot.subsystems.swerve.SwervePosition;;
 
 public class BezierCurve implements SwerveTrajectory {
 
-    Vector2 a, b, c, d;
-    double rotStart, rotEnd;
+    public Vector2 a;
+    public Vector2 b;
+    public Vector2 c;
+    public Vector2 d;
+    public double rotStart, rotEnd;
     double maxRot;
     Vector2 maxTrl;
     double length;
@@ -27,7 +30,7 @@ public class BezierCurve implements SwerveTrajectory {
     }
 
     // public BezierCurve(String PathFile) {}
-    
+
     public SwerveState get(double t) {
         Vector2 robotPos = SwervePosition.getPosition();
         double tClose = getClosestT(robotPos);
@@ -50,7 +53,7 @@ public class BezierCurve implements SwerveTrajectory {
         return new SwerveState(this.c, this.rotEnd, new Vector2(0, 0), 0.0);
     }
 
-    private Vector2 getPoint(double t) {
+    public Vector2 getPoint(double t) {
         double x = (Math.pow(1 - t,3) * a.x) +
         (3 * Math.pow(1 - t,2) * t * b.x) +
         (3 * (1 - t) * Math.pow(t,2) * c.x) +
@@ -63,10 +66,12 @@ public class BezierCurve implements SwerveTrajectory {
 
         Vector2 r = new Vector2(x, y);
 
+        // System.out.println("T: " + t + " X: " + x + " Y: " + y);
+
         return r;
     }
 
-    private Vector2 getTangent(double t) {
+    public Vector2 getTangent(double t) {
         // get derivative of the curve
         double x = -3 * a.x * Math.pow((1 - t), 2) + 3 * b.x * (3 * Math.pow(t, 2) - 4 * t + 1) + 3 * c.x * (2 * t - 3 * Math.pow(t, 2)) + 3 * d.x * Math.pow(t, 2);
         double y = -3 * a.y * Math.pow((1 - t), 2) + 3 * b.y * (3 * Math.pow(t, 2) - 4 * t + 1) + 3 * c.y * (2 * t - 3 * Math.pow(t, 2)) + 3 * d.y * Math.pow(t, 2);
@@ -75,7 +80,7 @@ public class BezierCurve implements SwerveTrajectory {
         return vectorTangent;
     }
 
-    private double approxLength() {
+    public double approxLength() {
         int n = 100;
         double l = 0;
         Vector2 pPoint = getPoint(0);
@@ -87,9 +92,11 @@ public class BezierCurve implements SwerveTrajectory {
         return l;
     }
 
-    private double approxRemainingLength(int startingI) {
+    public double approxRemainingLength(double T) {
         int n = 100;
         double l = 0;
+        int startingI = (int) (T * 100);
+        // System.out.println("T: " + T + "starting I: " + startingI);
         Vector2 pPoint = getPoint(0);
         for(int i = startingI; i <= n; i++){
             double t = (double) i / (double) n;
@@ -99,8 +106,8 @@ public class BezierCurve implements SwerveTrajectory {
         return l;
     }
 
-    private double getClosestT(Vector2 robotPos) {
-        int n = 100;
+    public double getClosestT(Vector2 robotPos) {
+        double n = 100;
         double t = 0;
         double distance;
         Vector2 distanceVector;
@@ -111,16 +118,19 @@ public class BezierCurve implements SwerveTrajectory {
         distance = distanceVector.mag();
         t = 0;
         smallestDistance = distance;
-        for (int i = 1; i <= n; i++) {
+        // System.out.println(distance + " " + 0);
+        for (double i = 1; i <= n; i++) {
             point = getPoint(i / n);
             distanceVector = point.sub(robotPos);
             distance = distanceVector.mag();
+            // System.out.println(distance + " " + i / n);
             if (distance < smallestDistance) {
                 t = i / n;
                 smallestDistance = distance;
             }
         }
-        System.out.println("distance from t: " + smallestDistance + " closest value t: " + t);
+        // System.out.println("distance from t: " + smallestDistance + " closest value t: " + t);
+        // System.out.println("Current T: " + getPoint(t) + " Next T: " + getPoint(t + 0.01));
         return t;
     }
 }
