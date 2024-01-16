@@ -107,7 +107,7 @@ public class BezierCurve implements SwerveTrajectory {
     }
 
     public double getClosestT(Vector2 robotPos) {
-        double n = 100;
+        double n = 3000;
         double t = 0;
         double distance;
         Vector2 distanceVector;

@@ -15,5 +15,5 @@ public abstract class Autoframe {
         done = true;
     }
 
-    public void finish() { }
+    public void finish() {}
 }

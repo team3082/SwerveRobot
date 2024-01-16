@@ -105,8 +105,6 @@ public class Telemetry {
         // Input other misc values into Shuffleboard.
         pigeonTab.add("Pigeon", Pigeon.pigeon);
         robotTab.add("Field View", field);
-        robotPD = new PowerDistribution(0, ModuleType.kCTRE);
-        power.add("PDP", robotPD);
 
         // robotTab.add("Pose", SwervePosition.getPose());
         // robotTab.add("Rotation", Rotation2d.fromRadians(Pigeon.getRotationRad()));

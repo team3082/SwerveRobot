@@ -17,7 +17,7 @@ public class Tuning {
 
     // TODO Tune
     // These are BS numbers rn
-    public static final double SWERVE_TRL_P = 0.1;
-    public static final double SWERVE_TRL_I = 0.001;
-    public static final double SWERVE_TRL_D = 0.03;
+    public static final double SWERVE_TRL_P = 0.9;
+    public static final double SWERVE_TRL_I = 0.005;
+    public static final double SWERVE_TRL_D = 0.08;
 }

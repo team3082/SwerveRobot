@@ -1,5 +1,5 @@
 package frc.robot.autoframe;
-import frc.robot.subsystems.Pigeon;
+import frc.robot.subsystems.swerve.SwerveManager;
 import frc.robot.subsystems.swerve.SwervePosition;
 import frc.robot.utils.PIDController;
 import frc.robot.utils.Vector2;
@@ -21,7 +21,7 @@ public class FollowBezierCurve extends Autoframe{
     @Override
     public void start() {
         SwervePosition.setPosition(this.trajectory.a);
-        this.trajectoryPID = new PIDController(Tuning.SWERVE_TRL_P, Tuning.SWERVE_TRL_I, Tuning.SWERVE_TRL_D, 1.0, 1.0, 0.25);
+        this.trajectoryPID = new PIDController(Tuning.SWERVE_TRL_P, Tuning.SWERVE_TRL_I, Tuning.SWERVE_TRL_D, 1.0, 1.0, 0.75);
         this.trajectoryPID.setDest(1.0);
     }   
 
@@ -38,7 +38,7 @@ public class FollowBezierCurve extends Autoframe{
             translationSpeed *= 0.05;
         }
 
-        movement = movementVector.mul(translationSpeed);
+        SwerveManager.rotateAndDrive(0.0, movementVector.rotate(Math.PI/2.0).mul(translationSpeed));
 
         if (t == 1.0) {
             movement = new Vector2();

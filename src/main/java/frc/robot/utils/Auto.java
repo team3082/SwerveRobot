@@ -80,8 +80,8 @@ public class Auto {
             System.out.println("Done");
         }
 
-        // Rotate and drive the robot according to the output of the active AutoFrames
-        SwerveManager.rotateAndDrive(rotSpeed * rotScale, movement.mul(moveScale));
+        // // Rotate and drive the robot according to the output of the active AutoFrames
+        // SwerveManager.rotateAndDrive(rotSpeed * rotScale, movement.mul(moveScale));
     }
 
 }
