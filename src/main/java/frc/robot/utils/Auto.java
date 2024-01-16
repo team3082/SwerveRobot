@@ -13,7 +13,8 @@ import frc.robot.utils.trajectories.BezierCurve;
 public class Auto {
     public static void bezierCurveAutoTest() {
         Autoframe[] Frames = new Autoframe[] {
-            new FollowBezierCurve(new BezierCurve(new Vector2(33, -149), new Vector2(101.6, -106), new Vector2(-87.5, -67), new Vector2(-17, -26), 0.0, 1, new Vector2(1, 1), 1.0))
+            new FollowBezierCurve(new BezierCurve(new Vector2(33, -149), new Vector2(101.6, -106), new Vector2(-87.5, -67), new Vector2(-17, -26), 0.0, 1, new Vector2(1, 1), 1.0)),
+            new FollowBezierCurve(new BezierCurve(new Vector2(-17, -26), new Vector2(-87.5, -67), new Vector2(101.6, -106), new Vector2(33, -149), 1, 0.0, new Vector2(1,1), 1.0))
         };
         queueFrames(Frames);
     }
