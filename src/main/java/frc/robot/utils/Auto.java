@@ -6,9 +6,18 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import frc.robot.autoframe.Autoframe;
+import frc.robot.autoframe.FollowBezierCurve;
 import frc.robot.subsystems.swerve.SwerveManager;
+import frc.robot.utils.trajectories.BezierCurve;
 
 public class Auto {
+    public static void bezierCurveAutoTest() {
+        Autoframe[] Frames = new Autoframe[] {
+            new FollowBezierCurve(new BezierCurve(new Vector2(33, -149), new Vector2(101.6, -106), new Vector2(-87.5, -67), new Vector2(-17, -26), 0.0, 1, new Vector2(1, 1), 1.0))
+        };
+        queueFrames(Frames);
+    }
+
     // AUTO SYSTEM =================================================
     public static Queue<Autoframe> queuedFrames;
     public static HashSet<Autoframe> activeFrames = new HashSet<>();
@@ -20,6 +29,7 @@ public class Auto {
 
     public static double moveScale = 1;
     public static double rotScale = 1;
+
 
     private static void queueFrames(Autoframe[] frames) {
         activeFrames.clear();
