@@ -8,6 +8,7 @@ import static frc.robot.utils.Auto.movement;
 
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.Robot;
+import frc.robot.Tuning;
 
 public class FollowBezierCurve extends Autoframe{
     BezierCurve trajectory;
@@ -20,7 +21,7 @@ public class FollowBezierCurve extends Autoframe{
     @Override
     public void start() {
         SwervePosition.setPosition(this.trajectory.a);
-        this.trajectoryPID = new PIDController(0.1, 0.001, 0.03, 1.0, 1.0, 0.25);
+        this.trajectoryPID = new PIDController(Tuning.SWERVE_TRL_P, Tuning.SWERVE_TRL_I, Tuning.SWERVE_TRL_D, 1.0, 1.0, 0.25);
         this.trajectoryPID.setDest(1.0);
     }   
 
