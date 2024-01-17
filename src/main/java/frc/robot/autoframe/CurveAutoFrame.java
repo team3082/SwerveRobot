@@ -1,5 +1,4 @@
 package frc.robot.autoframe;
-import frc.robot.autoframe.Autoframe;
 
 public class CurveAutoFrame {
     Autoframe autoFrame;

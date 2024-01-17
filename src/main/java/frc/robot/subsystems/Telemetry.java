@@ -9,16 +9,11 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.util.datalog.DataLog;
-import edu.wpi.first.util.datalog.StringLogEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import frc.robot.subsystems.swerve.SwerveManager;
 import frc.robot.subsystems.swerve.SwervePID;
 import frc.robot.subsystems.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
@@ -70,7 +65,6 @@ public class Telemetry {
     private static final ShuffleboardTab moveTab = Shuffleboard.getTab("Move PID");
     private static final ShuffleboardTab rotTab = Shuffleboard.getTab("Rot PID");
     private static final ShuffleboardTab pos = Shuffleboard.getTab("Positions");
-    private static final ShuffleboardTab power = Shuffleboard.getTab("Power Values");
 
     // NetworkTable entries
     // If we want granular control over our values via Glass (e.g, tuning PID),
@@ -97,18 +91,11 @@ public class Telemetry {
     // SwervePosition
     private static final GenericEntry swervePos = pos.add("Swerve Position", SwervePosition.getPosition().toString()).getEntry();
 
-    // Public object attached to the wpilib data logger
-    public static DataLog FRClogger;
-
     public static void init() {
 
         // Input other misc values into Shuffleboard.
         pigeonTab.add("Pigeon", Pigeon.pigeon);
         robotTab.add("Field View", field);
-
-        // robotTab.add("Pose", SwervePosition.getPose());
-        // robotTab.add("Rotation", Rotation2d.fromRadians(Pigeon.getRotationRad()));
-        // robotTab.add("SwerveStates", SwerveManager.returnStates());
     }
 
     /**
