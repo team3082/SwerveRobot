@@ -7,14 +7,12 @@ import frc.robot.subsystems.swerve.SwervePosition;;
 
 public class BezierCurve implements SwerveTrajectory {
 
-    public Vector2 a;
-    public Vector2 b;
-    public Vector2 c;
-    public Vector2 d;
+    public Vector2 a, b, c, d;
     public double rotStart, rotEnd;
     double maxRot;
     Vector2 maxTrl;
     double length;
+    Vector2[] curvePoints;
 
     public BezierCurve(Vector2 a, Vector2 b, Vector2 c, Vector2 d, double rotStart, double rotEnd, Vector2 maxTrl, double maxRot) {
         this.a = a;

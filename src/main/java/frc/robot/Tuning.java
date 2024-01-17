@@ -20,4 +20,6 @@ public class Tuning {
     public static final double SWERVE_TRL_P = 0.95;
     public static final double SWERVE_TRL_I = 0.01;
     public static final double SWERVE_TRL_D = 0.1;
+
+    public static final int CURVE_RESOLUTION= 3000;
 }

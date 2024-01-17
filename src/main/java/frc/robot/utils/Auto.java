@@ -6,15 +6,60 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import frc.robot.autoframe.Autoframe;
+import frc.robot.autoframe.CurveAutoFrame;
 import frc.robot.autoframe.FollowBezierCurve;
-import frc.robot.subsystems.swerve.SwerveManager;
+import frc.robot.subsystems.swerve.SwervePosition;
 import frc.robot.utils.trajectories.BezierCurve;
 
 public class Auto {
     public static void bezierCurveAutoTest() {
+        SwervePosition.setPosition(new Vector2(33, -149));
         Autoframe[] Frames = new Autoframe[] {
-            new FollowBezierCurve(new BezierCurve(new Vector2(33, -149), new Vector2(101.6, -106), new Vector2(-87.5, -67), new Vector2(-17, -26), 0.0, 1, new Vector2(1, 1), 1.0)),
-            new FollowBezierCurve(new BezierCurve(new Vector2(-17, -26), new Vector2(-87.5, -67), new Vector2(101.6, -106), new Vector2(33, -149), 1, 0.0, new Vector2(1,1), 1.0))
+            new FollowBezierCurve(new BezierCurve(new Vector2(33, -149), new Vector2(101.6, -106), new Vector2(-87.5, -67), new Vector2(-17, -26), 0.0, 1, new Vector2(1, 1), 1.0),
+            new CurveAutoFrame[] {}),
+            new FollowBezierCurve(new BezierCurve(new Vector2(-17, -26), new Vector2(-87.5, -67), new Vector2(101.6, -106), new Vector2(33, -149), 1, 0.0, new Vector2(1,1), 1.0),
+            new CurveAutoFrame[] {})
+        };
+        queueFrames(Frames);
+    }
+
+    public static void fourPieceAmpSide() {
+        // TODO test this
+        SwervePosition.setPosition(new Vector2(105, -295));
+        Autoframe[] Frames = new Autoframe[] {
+            // go to second piece
+            new FollowBezierCurve(new BezierCurve(new Vector2(105, -295), new Vector2(100, -260), new Vector2(101, -248.3), new Vector2(109, -223.5), 0.0, 0.0, new Vector2(1, 1), 1.0),
+            new CurveAutoFrame[] {}),
+            // go to third piece
+            new FollowBezierCurve(new BezierCurve(new Vector2(109, -223.5), new Vector2(100, -250), new Vector2(65.8, -250.7), new Vector2(56.2, -222.6), 0.0, 0.0, new Vector2(1, 1), 1.0),
+            new CurveAutoFrame[] {}),
+            // go to fourth piece
+            new FollowBezierCurve(new BezierCurve(new Vector2(56.2, -222.6), new Vector2(50.2, -262), new Vector2(18, -239), new Vector2(3.4, -223.7), 0.0, 0.0, new Vector2(1, 1), 1.0),
+            new CurveAutoFrame[] {})
+        };
+        queueFrames(Frames);
+    }
+
+    public static void fourPieceSourceSide() {
+        // TODO make this
+        Autoframe[] Frames = new Autoframe[] {
+
+        };
+        queueFrames(Frames);
+    }
+
+    public static void threePieceMiddleAmpSide() {
+        // TODO make this
+        Autoframe[] Frames = new Autoframe[] {
+
+        };
+        queueFrames(Frames);
+    }
+
+    public static void threePieceMiddleSourceSide() {
+        // TODO make
+        Autoframe[] Frames = new Autoframe[] {
+
         };
         queueFrames(Frames);
     }
