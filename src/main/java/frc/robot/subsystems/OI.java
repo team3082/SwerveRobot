@@ -44,8 +44,8 @@ public class OI {
         if (driverStick.getRawAxis(boost) > .5) kBoostCoefficient = 1;
 
         Vector2 drive = new Vector2(driverStick.getRawAxis(moveX), -driverStick.getRawAxis(moveY));
-        double rotate = RMath.smoothJoystick1(driverStick.getRawAxis(rotateX)) * -0.3;
-
+        double rotate = RMath.smoothJoystick1(driverStick.getRawAxis(rotateX)) * -0.5;
+        
         if (drive.mag() < 0.125)
             drive = new Vector2();
         else
