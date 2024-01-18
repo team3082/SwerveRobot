@@ -86,6 +86,10 @@ public class Vector2 {
         return Math.atan2(y, x);
     }
 
+    public double dist(Vector2 v){
+        return this.sub(v).mag();
+    }
+
     public Vector2[] split(Vector2 v, double num) {
         return new Vector2[] {
             

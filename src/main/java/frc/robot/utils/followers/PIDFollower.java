@@ -13,9 +13,8 @@ public class PIDFollower extends SwerveFollower{
     double kProt, kIrot, kDrot;
     double[] intAccum = new double[3];
     double[] maxIntAccum;
-    private double timeScale = 1.0;
 
-    public PIDFollower(SwerveTrajectory traj, double kppos, double kipos, double kdpos, double kprot, double kirot, double kdrot, double timeScale, double[] maxIntAccum){
+    public PIDFollower(SwerveTrajectory traj, double kppos, double kipos, double kdpos, double kprot, double kirot, double kdrot, double[] maxIntAccum){
         super(traj);
         this.kPpos = kppos;
         this.kIpos = kipos;
@@ -23,11 +22,10 @@ public class PIDFollower extends SwerveFollower{
         this.kProt = kprot;
         this.kIrot = kirot;
         this.kDrot = kdrot;
-        this.timeScale = timeScale;
         this.maxIntAccum = maxIntAccum;
     }
 
-    public PIDFollower(SwerveTrajectory traj, double timeScale, double[] maxIntAccum) {
+    public PIDFollower(SwerveTrajectory traj, double[] maxIntAccum) {
         super(traj);
         this.kPpos = Tuning.SWERVE_TRL_P;
         this.kIpos = Tuning.SWERVE_TRL_I;
@@ -35,12 +33,11 @@ public class PIDFollower extends SwerveFollower{
         this.kProt = Tuning.SWERVE_ROT_P;
         this.kIrot = Tuning.SWERVE_ROT_I;
         this.kDrot = Tuning.SWERVE_ROT_D;
-        this.timeScale = timeScale;
         this.maxIntAccum = maxIntAccum;
     }
 
     public SwerveInstruction getInstruction(SwerveState currentState, double t){
-        SwerveState desiredState = path.get(t * timeScale);
+        SwerveState desiredState = path.get(t);
         double[] error = currentState.getError(desiredState);
         //updating int accumulator
         intAccum = updateAccumulator(intAccum, currentState.toArray(), maxIntAccum);

@@ -84,6 +84,10 @@ public class SwerveState {
         return new double[]{x, y, theta, dx, dy, dtheta};
     }
 
+    public Vector2 getPos(){
+        return new Vector2(this.x, this.y);
+    }
+
     public String toString(){
         return String.format("x: % .2f %ny: % .2f %ntheta: % .2f %ndx: % .2f %ndy: % .2f %ndtheta: % .2f", x,y,theta,dx,dy,dtheta);
     }

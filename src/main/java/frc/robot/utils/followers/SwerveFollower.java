@@ -7,9 +7,9 @@ import frc.robot.utils.trajectories.SwerveTrajectory;
 public abstract class SwerveFollower {
     public final SwerveTrajectory path;
 
-    public SwerveFollower(SwerveTrajectory tj){
-        path = tj;
+    public SwerveFollower(SwerveTrajectory traj){
+        path = traj;
     }
-
+    
     public abstract SwerveInstruction getInstruction(SwerveState currentState, double t);
 }
