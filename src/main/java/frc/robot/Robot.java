@@ -48,6 +48,7 @@ public class Robot extends TimedRobot {
     RTime.init();
     Pigeon.setYaw(270);
     Auto.bezierCurveAutoTest();
+    // Auto.trajFollowerTest();
   }
 
 

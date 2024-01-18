@@ -8,8 +8,12 @@ import java.util.Queue;
 import frc.robot.autoframe.Autoframe;
 import frc.robot.autoframe.CurveAutoFrame;
 import frc.robot.autoframe.FollowBezierCurve;
+import frc.robot.autoframe.TrajectoryFollow;
 import frc.robot.subsystems.swerve.SwervePosition;
+import frc.robot.subsystems.swerve.SwerveState;
+import frc.robot.utils.followers.PIDFollower;
 import frc.robot.utils.trajectories.BezierCurve;
+import frc.robot.utils.trajectories.LinearSpline;
 
 public class Auto {
     public static void bezierCurveAutoTest() {
@@ -21,6 +25,17 @@ public class Auto {
             new CurveAutoFrame[] {})
         };
         queueFrames(Frames);
+    }
+
+    public static void trajFollowerTest() {
+        SwervePosition.setPosition(new Vector2(33, -149));
+        LinearSpline traj = new LinearSpline(new SwerveState[]{new SwerveState(new double[]{33.0,-149.0,0.0}), new SwerveState(new double[]{33.0,0.0,0.0})}, 1.0);
+        PIDFollower controller = new PIDFollower(traj, new double[3]);
+        Autoframe[] frames = new Autoframe[]{
+            new TrajectoryFollow(controller)
+        };
+
+        queueFrames(frames);
     }
 
     public static void fourPieceAmpSide() {

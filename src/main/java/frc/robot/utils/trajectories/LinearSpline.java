@@ -6,16 +6,19 @@ import frc.robot.utils.RMath;
 public class LinearSpline implements SwerveTrajectory{
 
     private SwerveState[] states;
+    private double timeScale;
     
     /**creates a linear spline through the points provided */
-    public LinearSpline(SwerveState[] states){
+    public LinearSpline(SwerveState[] states, double timeScale){
         this.states = states;
+        this.timeScale = timeScale;
     }
     public double length(){
-        return states.length - 1;
+        return (states.length - 1) * timeScale;
     }
 
     public SwerveState get(double t){
+        t /= timeScale;
         if(t > length()){
             throw new IllegalArgumentException();
         }
