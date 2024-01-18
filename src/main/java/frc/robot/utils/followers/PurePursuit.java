@@ -37,11 +37,11 @@ public class PurePursuit extends SwerveFollower{
     public SwerveInstruction getInstruction(SwerveState currentState, double t){
         //always do the same rotation
         SwervePID.setDestRot(endState.theta);
-        double rot = SwervePID.updateOutputRot();
+        double rot = SwervePID.updateOutputRot();//TODO don't use swerePID
 
         //finding nearest point
-        double currentT = findNearest(currentState.getPos(), 10000);
-        SwerveState nearestState = path.get(currentT);
+        double currentT = findNearest(currentState.getPos(), 10000, lastT);
+        double lastT = currentT;
 
         //checking if it should be braking
         double distToEnd = currentState.getPos().dist(endState.getPos());
@@ -62,16 +62,15 @@ public class PurePursuit extends SwerveFollower{
         }
     }
 
-    private double findNearest(Vector2 pos, int res){
+    private double findNearest(Vector2 pos, int res, double startT){
         double step = path.length() / res;
-        double t = lastT;
+        double t = startT;
         double minDist = getDist(t, pos);
         //keep moving forward until you get further away
         while(getDist(t, pos) <= minDist){
             minDist = getDist(t,pos);
             t += step;
         }
-
         return t - step;
     }
 
