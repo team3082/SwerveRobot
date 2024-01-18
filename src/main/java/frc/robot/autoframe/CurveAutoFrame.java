@@ -1,5 +1,4 @@
 package frc.robot.autoframe;
-import frc.robot.autoframe.Autoframe;
 
 public class CurveAutoFrame {
     Autoframe autoFrame;
@@ -9,15 +8,15 @@ public class CurveAutoFrame {
 
     }
 
-    public CurveAutoFrame() {
-
-    }
-
     public void start() {
         this.autoFrame.start();
     }
 
     public void update() {
         this.autoFrame.update();
+    }
+
+    public void finish() {
+        this.autoFrame.finish();
     }
 }

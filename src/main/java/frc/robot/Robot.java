@@ -14,7 +14,7 @@ import frc.robot.subsystems.swerve.SwerveManager;
 import frc.robot.subsystems.swerve.SwervePID;
 import frc.robot.subsystems.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
-import frc.robot.utils.trajectories.BezierCurve;
+import frc.robot.utils.constructors.trajectories.BezierCurve;
 import frc.robot.utils.RTime;
 
 public class Robot extends TimedRobot {
@@ -47,7 +47,8 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     RTime.init();
     Pigeon.setYaw(270);
-    Auto.bezierCurveAutoTest();
+    // Auto.bezierCurveAutoTest();
+    Auto.fourPieceAmpSide();
   }
 
 
@@ -90,7 +91,9 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {}
 
   @Override
-  public void testInit() {}
+  public void testInit() {
+    
+  }
 
   @Override
   public void testPeriodic() {}
