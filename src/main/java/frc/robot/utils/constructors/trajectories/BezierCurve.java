@@ -1,7 +1,5 @@
 package frc.robot.utils.constructors.trajectories;
 
-import java.util.ArrayList;
-
 import frc.robot.utils.Vector2;
 import frc.robot.Tuning;
 
@@ -52,7 +50,7 @@ public class BezierCurve{
     }
 
     public Vector2 getTangent(double t, Vector2 robotPos) {
-        double tTangent = t + 0.1;
+        double tTangent = t + 0.05;
         // System.out.println(tTangent);
         if (tTangent > 1.0) {t = 1.0;}
         Vector2 vectorTangent = getPoint(tTangent).sub(robotPos).norm();

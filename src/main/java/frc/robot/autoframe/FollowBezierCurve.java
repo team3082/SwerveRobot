@@ -46,7 +46,7 @@ public class FollowBezierCurve extends Autoframe{
         double translationSpeed = this.trajectoryPID.updateOutput(lengthTraveled);
 
         // If we are within our deadband
-        if (t > 0.97) {
+        if (t > (1 - Tuning.CURVE_DEADBAND)) {
             // Kill the drivetrain if we are in simulation
             if (RobotBase.isSimulation()) {
                 movement = new Vector2();
