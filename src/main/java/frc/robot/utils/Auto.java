@@ -29,7 +29,7 @@ public class Auto {
 
     public static void trajFollowerTest() {
         SwervePosition.setPosition(new Vector2(33, -149));
-        LinearSpline traj = new LinearSpline(new SwerveState[]{new SwerveState(new double[]{33.0,-149.0,0.0}), new SwerveState(new double[]{33.0,0.0,0.0})}, 1.0);
+        LinearSpline traj = new LinearSpline(new SwerveState[]{new SwerveState(new double[]{33.0,-149.0,0.0}), new SwerveState(new double[]{33.0,0.0,0.0})}, 2.0);
         PIDFollower controller = new PIDFollower(traj, new double[3]);
         Autoframe[] frames = new Autoframe[]{
             new TrajectoryFollow(controller)

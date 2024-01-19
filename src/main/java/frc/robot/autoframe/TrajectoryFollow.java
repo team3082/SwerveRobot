@@ -1,6 +1,7 @@
 package frc.robot.autoframe;
 
 import frc.robot.subsystems.Pigeon;
+import frc.robot.subsystems.swerve.SwerveInstruction;
 import frc.robot.subsystems.swerve.SwerveManager;
 import frc.robot.subsystems.swerve.SwervePosition;
 import frc.robot.subsystems.swerve.SwerveState;
@@ -27,7 +28,9 @@ public class TrajectoryFollow extends Autoframe{
         double currentAng = Pigeon.getRotationRad();
         double currengAngVel = Pigeon.getDeltaRotRad();
         SwerveState currentState = new SwerveState(currentPos, currentAng, currentVel, currengAngVel);
-        SwerveManager.rotateAndDrive(controller.getInstruction(currentState, RTime.now() - tStart));
+        SwerveInstruction instruction = controller.getInstruction(currentState, RTime.now() - tStart);
+        instruction = new SwerveInstruction(instruction.rotation, new Vector2(-instruction.movement.y, instruction.movement.x));
+        SwerveManager.rotateAndDrive(instruction);
         if(controller.path.endState().getPos().dist(currentPos) < 0.1){
             done = true;
         }

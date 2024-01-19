@@ -1,6 +1,8 @@
 package frc.robot.utils.followers;
 
 
+import java.util.Arrays;
+
 import frc.robot.Tuning;
 import frc.robot.subsystems.swerve.SwerveInstruction;
 import frc.robot.subsystems.swerve.SwerveState;
@@ -37,8 +39,15 @@ public class PIDFollower extends SwerveFollower{
     }
 
     public SwerveInstruction getInstruction(SwerveState currentState, double t){
-        SwerveState desiredState = path.get(t);
+        SwerveState desiredState;
+        if(t > path.length()){
+            desiredState = path.endState();
+        }else{
+            desiredState = path.get(t);
+        }
+
         double[] error = currentState.getError(desiredState);
+        System.out.println(Arrays.toString(error));
         //updating int accumulator
         intAccum = updateAccumulator(intAccum, currentState.toArray(), maxIntAccum);
         
