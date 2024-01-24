@@ -66,7 +66,7 @@ public class OI {
             }
         }
 
-        System.out.println("Rotate: " + rotate + " Drive: " + drive.toString());
+        // System.out.println("Rotate: " + rotate + " Drive: " + drive.toString());
 
         // Swerving and a steering! Zoom!
         SwerveManager.rotateAndDrive(rotate, drive);

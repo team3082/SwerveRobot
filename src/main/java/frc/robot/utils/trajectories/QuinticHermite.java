@@ -53,9 +53,9 @@ public class QuinticHermite implements SwerveTrajectory{
     }
 
     private double differential = 1e-6;
-    public SwerveState get(double t){
-        t/=timeScale;
-        if(t + differential >1){
+    public SwerveState get(double T){
+        double t = T / timeScale;
+        if(t + differential > 1){
             return finalState;
         }
         double[] pos = getPosition(t);

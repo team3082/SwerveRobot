@@ -9,6 +9,7 @@ import frc.robot.autoframe.Autoframe;
 import frc.robot.autoframe.CurveAutoFrame;
 import frc.robot.autoframe.FollowBezierCurve;
 import frc.robot.autoframe.TrajectoryFollow;
+import frc.robot.subsystems.Pigeon;
 import frc.robot.subsystems.swerve.SwervePosition;
 import frc.robot.subsystems.swerve.SwerveState;
 import frc.robot.utils.RTime;
@@ -16,6 +17,8 @@ import frc.robot.utils.Vector2;
 import frc.robot.utils.followers.PIDFollower;
 import frc.robot.utils.trajectories.BezierCurve;
 import frc.robot.utils.trajectories.LinearSpline;
+import frc.robot.utils.trajectories.QuinticHermite;
+import frc.robot.utils.trajectories.SwerveTrajectory;
 
 public class Auto {
     public static void bezierCurveAutoTest() {
@@ -31,7 +34,14 @@ public class Auto {
 
     public static void trajFollowerTest() {
         SwervePosition.setPosition(new Vector2(33, -149));
-        LinearSpline traj = new LinearSpline(new SwerveState[]{new SwerveState(new double[]{33.0,-149.0,0.0}), new SwerveState(new double[]{33.0,0.0,0.0})}, 1.0);
+        Pigeon.setYawRad(0);
+        SwerveState[] anchors = new SwerveState[]{
+            new SwerveState(33,-149, 0,0,0,0), 
+            new SwerveState(101.6, -106, 0, 0,0,0), 
+            new SwerveState(-87.5, -67,0,0,0,0), 
+            new SwerveState(-17,-26,Math.PI/2,0,0,0)
+        };
+        QuinticHermite traj = new QuinticHermite(anchors, 2);
         PIDFollower controller = new PIDFollower(traj, new double[3]);
         Autoframe[] frames = new Autoframe[]{
             new TrajectoryFollow(controller)
