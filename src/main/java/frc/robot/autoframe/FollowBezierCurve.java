@@ -5,7 +5,7 @@ import frc.robot.subsystems.swerve.SwervePosition;
 import frc.robot.utils.PIDController;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.BezierCurve;
-import static frc.robot.utils.Auto.movement;
+import static frc.robot.Auto.movement;
 
 import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.Tuning;
