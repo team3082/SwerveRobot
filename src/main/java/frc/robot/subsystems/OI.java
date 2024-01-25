@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotBase;
+import frc.robot.Robot;
 import frc.robot.controls.ControlReference;
 import frc.robot.subsystems.swerve.SwerveManager;
 import frc.robot.subsystems.swerve.SwerveModule;
@@ -49,7 +51,7 @@ public class OI {
         if (drive.mag() < 0.125)
             drive = new Vector2();
         else
-            drive = RMath.smoothJoystick2(drive).mul(kBoostCoefficient);
+            drive = RMath.smoothJoystick2(drive).mul(RobotBase.isSimulation() ? 0.0092 : kBoostCoefficient);
 
         if (Math.abs(rotate) < 0.005) {
             rotate = 0;
@@ -66,7 +68,8 @@ public class OI {
             }
         }
 
-        // System.out.println("Rotate: " + rotate + " Drive: " + drive.toString());
+        // Scale down when we are in simulation
+        if (Robot.isSimulation()) rotate *= 0.00002;
 
         // Swerving and a steering! Zoom!
         SwerveManager.rotateAndDrive(rotate, drive);
