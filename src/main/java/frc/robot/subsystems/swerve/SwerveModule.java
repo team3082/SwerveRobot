@@ -54,6 +54,7 @@ public class SwerveModule {
         this.steerPID = this.steerMotor.getPIDController();
 
         this.steerPID.setPositionPIDWrappingEnabled(true);
+        this.drivePID.setPositionPIDWrappingEnabled(true);
 
         this.steerPID.setP(Tuning.SWERVE_STEER_P);
         this.steerPID.setI(Tuning.SWERVE_STEER_I);
