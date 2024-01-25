@@ -61,6 +61,15 @@ public class SwerveState {
 
     }
 
+    public SwerveState(SwerveState state){
+        this.dx = state.dx;
+        this.dy = state.dy;
+        this.dtheta = state.dtheta;
+        this.x = state.x;
+        this.y = state.y;
+        this.theta = state.theta;
+    }
+
     //TODO might make a specific class for swerve errors to reduce ambiguity
     /**
      * Finds the error between this state a desired state
@@ -90,5 +99,21 @@ public class SwerveState {
 
     public String toString(){
         return String.format("x: % .2f %ny: % .2f %ntheta: % .2f %ndx: % .2f %ndy: % .2f %ndtheta: % .2f", x,y,theta,dx,dy,dtheta);
+    }
+
+    /**
+     * if t is 1 it will be b if t is 0 it will be this
+     * @param b b
+     */
+    public SwerveState interpolate(SwerveState b, double t){
+        double[] newState = new double[6];
+        newState[0] = RMath.interpolate(this.x,b.x,t);
+        newState[1] = RMath.interpolate(this.y,b.y,t);
+        newState[2] = RMath.interpolateRotationRad(this.theta,b.theta,t);
+        newState[3] = RMath.interpolate(this.dx,b.dx,t);
+        newState[4] = RMath.interpolate(this.dy,b.dy,t);
+        newState[5] = RMath.interpolateRotationRad(this.dtheta,b.dtheta,t);
+
+        return new SwerveState(newState);
     }
 }
