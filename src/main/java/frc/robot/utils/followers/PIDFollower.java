@@ -53,8 +53,8 @@ public class PIDFollower extends SwerveFollower{
         intAccum = updateAccumulator(intAccum, currentState.toArray(), maxIntAccum);
         
 
-        Vector2 trans = new Vector2(error[0] * kPpos + error[3] * kDpos + intAccum[0] * kIpos, error[1] * kPpos + error[4] * kDpos + intAccum[1] * kIpos);
-        double rot = kProt * error[2] + kDrot * error[5] + kIrot * intAccum[2];
+        Vector2 trans = new Vector2(error[0] * kPpos + -error[3] * kDpos + intAccum[0] * kIpos, error[1] * kPpos + -error[4] * kDpos + intAccum[1] * kIpos);
+        double rot = kProt * error[2] + -kDrot * error[5] + kIrot * intAccum[2];
         
         return new SwerveInstruction(rot, trans);
     }

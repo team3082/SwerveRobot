@@ -19,7 +19,7 @@ public class Tuning {
     // These are BS numbers rn
     public static final double SWERVE_TRL_P = 0.02;
     public static final double SWERVE_TRL_I = 0.00;
-    public static final double SWERVE_TRL_D = 0.001;
+    public static final double SWERVE_TRL_D = 0.002;
 
     public static final int CURVE_RESOLUTION= 3000;
 }

@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import frc.robot.utils.Auto;
 import frc.robot.utils.PIDController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.OI;

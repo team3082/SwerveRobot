@@ -33,15 +33,15 @@ public class Auto {
     }
 
     public static void trajFollowerTest() {
-        SwervePosition.setPosition(new Vector2(33, -149));
+        SwervePosition.setPosition(new Vector2(0, 0));
         Pigeon.setYawRad(0);
         SwerveState[] anchors = new SwerveState[]{
-            new SwerveState(33,-149, 0,0,0,0), 
-            new SwerveState(101.6, -106, 0, 0,0,0), 
-            new SwerveState(-87.5, -67,0,0,0,0), 
-            new SwerveState(-17,-26,Math.PI/2,0,0,0)
+            new SwerveState(0,0, 0,0,0,0), 
+            new SwerveState(0, -75, 0, 0,0,0), 
+            new SwerveState(60, -75,0,0,0,0), 
+            new SwerveState(60,0,0,0,0,0)
         };
-        QuinticHermite traj = new QuinticHermite(anchors, 2);
+        QuinticHermite traj = new QuinticHermite(anchors, 3);
         PIDFollower controller = new PIDFollower(traj, new double[3]);
         Autoframe[] frames = new Autoframe[]{
             new TrajectoryFollow(controller)
