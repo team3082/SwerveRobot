@@ -48,7 +48,6 @@ public class Robot extends TimedRobot {
     Pigeon.setYaw(270);
     // Auto.bezierCurveAutoTest();
     Auto.trajFollowerTest();
-    // Auto.fourPieceAmpSide();
   }
 
 
@@ -80,7 +79,6 @@ public class Robot extends TimedRobot {
     RTime.update();
     SwervePosition.update();
     OI.useInput();
-    System.out.println(Pigeon.getRotationRad());
     System.out.println("Position: " + SwervePosition.getPosition().toString());
   }
 
