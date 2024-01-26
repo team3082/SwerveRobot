@@ -26,4 +26,6 @@ public class Constants {
 
     // Radians per second
     public static final double turnVelFactor = (2 * Math.PI) / 60.0;
+
+    public static final double METERSTOINCHES = 39.3701;
 }

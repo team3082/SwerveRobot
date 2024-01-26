@@ -6,10 +6,12 @@ import java.util.List;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import static frc.robot.Constants.METERSTOINCHES;
+
 public class ChoreoTrajectory extends DiscreteTraj{
     
     private static DiscreteSwerveState toSwerveState(ChoreoState cs){
-        return new DiscreteSwerveState(cs.x,cs.y,cs.heading,cs.velocityX,cs.velocityY,cs.angularVelocity, cs.timestamp);
+        return new DiscreteSwerveState(cs.x * METERSTOINCHES,cs.y * METERSTOINCHES,cs.heading,cs.velocityX * METERSTOINCHES,cs.velocityY * METERSTOINCHES,cs.angularVelocity, cs.timestamp);
     }
 
     public ChoreoTrajectory(File f){
