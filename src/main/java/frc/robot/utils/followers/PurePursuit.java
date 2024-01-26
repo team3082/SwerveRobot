@@ -23,8 +23,7 @@ public class PurePursuit extends SwerveFollower{
 
     private double lastT;
 
-    public PurePursuit(SwerveTrajectory traj, double followSpeed, double maxAccel, double followDist){
-        super(traj);
+    public PurePursuit(double followSpeed, double maxAccel, double followDist){
         this.followSpeed = followSpeed;
         this.lookAheadDist = followDist;
         this.maxAccel = maxAccel;

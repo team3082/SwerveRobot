@@ -44,7 +44,8 @@ public class Auto {
             new SwerveState(60,0,0,0,0,0)
         };
         QuinticHermite traj = new QuinticHermite(anchors, 3);
-        PIDFollower controller = new PIDFollower(traj, new double[3]);
+        PIDFollower controller = new PIDFollower();
+        controller.setTrajectory(traj);
         Autoframe[] frames = new Autoframe[]{
             new TrajectoryFollow(controller)
         };

@@ -5,10 +5,10 @@ import frc.robot.subsystems.swerve.SwerveState;
 import frc.robot.utils.trajectories.SwerveTrajectory;
 
 public abstract class SwerveFollower {
-    public final SwerveTrajectory path;
+    public SwerveTrajectory path;
 
-    public SwerveFollower(SwerveTrajectory traj){
-        path = traj;
+    public void setTrajectory(SwerveTrajectory traj){
+        this.path = traj;
     }
     
     public abstract SwerveInstruction getInstruction(SwerveState currentState, double t);

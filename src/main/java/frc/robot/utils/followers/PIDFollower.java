@@ -16,8 +16,7 @@ public class PIDFollower extends SwerveFollower{
     double[] intAccum = new double[3];
     double[] maxIntAccum;
 
-    public PIDFollower(SwerveTrajectory traj, double kppos, double kipos, double kdpos, double kprot, double kirot, double kdrot, double[] maxIntAccum){
-        super(traj);
+    public PIDFollower(double kppos, double kipos, double kdpos, double kprot, double kirot, double kdrot, double[] maxIntAccum){
         this.kPpos = kppos;
         this.kIpos = kipos;
         this.kDpos = kdpos;
@@ -27,8 +26,7 @@ public class PIDFollower extends SwerveFollower{
         this.maxIntAccum = maxIntAccum;
     }
 
-    public PIDFollower(SwerveTrajectory traj, double[] maxIntAccum) {
-        super(traj);
+    public PIDFollower(double[] maxIntAccum) {
         this.kPpos = Tuning.SWERVE_TRL_P;
         this.kIpos = Tuning.SWERVE_TRL_I;
         this.kDpos = Tuning.SWERVE_TRL_D;
@@ -36,6 +34,10 @@ public class PIDFollower extends SwerveFollower{
         this.kIrot = Tuning.SWERVE_ROT_I;
         this.kDrot = Tuning.SWERVE_ROT_D;
         this.maxIntAccum = maxIntAccum;
+    }
+
+    public PIDFollower(){
+        this(new double[3]);
     }
 
     public SwerveInstruction getInstruction(SwerveState currentState, double t){
