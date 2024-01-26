@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.function.Supplier;
 
 import frc.robot.autoframe.Autoframe;
 import frc.robot.autoframe.CurveAutoFrame;
@@ -15,6 +16,7 @@ import frc.robot.subsystems.swerve.SwerveState;
 import frc.robot.utils.RTime;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.followers.PIDFollower;
+import frc.robot.utils.followers.SwerveFollower;
 import frc.robot.utils.trajectories.BezierCurve;
 import frc.robot.utils.trajectories.LinearSpline;
 import frc.robot.utils.trajectories.QuinticHermite;
@@ -104,7 +106,7 @@ public class Auto {
     public static double rotScale = 1;
 
 
-    private static void queueFrames(Autoframe[] frames) {
+    private static void queueFrames(Autoframe... frames) {
         activeFrames.clear();
         queuedFrames = new LinkedList<>(Arrays.asList(frames));
         startTimestamp = RTime.now();
