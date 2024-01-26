@@ -6,16 +6,21 @@ import java.util.List;
 import frc.robot.subsystems.swerve.SwerveState;
 
 public abstract class DiscreteTraj implements SwerveTrajectory{
-    private final List<DiscreteSwerveState> path = null;
+    protected List<DiscreteSwerveState> path;
 
     @Override
-    public SwerveState endState(){
+    public DiscreteSwerveState endState(){
         return path.get(path.size() - 1);
     }
 
     @Override
     public SwerveState startState(){
         return path.get(0);
+    }
+
+    @Override
+    public double length(){
+        return endState().time;
     }
 
     public SwerveState get(double t){
@@ -25,7 +30,7 @@ public abstract class DiscreteTraj implements SwerveTrajectory{
         }
         SwerveState a = path.get(posa);
         SwerveState b = path.get(posa+1);
-        double deltaT = path.get(posa+1).time - path.get(posa).time;
+        double deltaT = t - path.get(posa).time;
         return a.interpolate(b, deltaT);
     }
 
