@@ -1,12 +1,13 @@
 package frc.robot.utils.trajectories;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import frc.robot.subsystems.swerve.SwerveState;
 
-public abstract class DiscreteTraj implements SwerveTrajectory{
-    protected List<DiscreteSwerveState> path;
+public class DiscreteTraj implements SwerveTrajectory{
+    protected ArrayList<DiscreteSwerveState> path;
 
     @Override
     public DiscreteSwerveState endState(){
@@ -34,6 +35,8 @@ public abstract class DiscreteTraj implements SwerveTrajectory{
         return a.interpolate(b, deltaT);
     }
 
-    
+    public DiscreteTraj(ArrayList<DiscreteSwerveState> path){
+        this.path = path;
+    }
 
 }

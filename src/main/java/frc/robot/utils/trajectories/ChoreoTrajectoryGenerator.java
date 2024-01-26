@@ -1,30 +1,42 @@
 package frc.robot.utils.trajectories;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static frc.robot.Constants.METERSTOINCHES;
 
-public class ChoreoTrajectory extends DiscreteTraj{
+public class ChoreoTrajectoryGenerator{
     
     private static DiscreteSwerveState toSwerveState(ChoreoState cs){
         return new DiscreteSwerveState(cs.x * METERSTOINCHES,cs.y * METERSTOINCHES,cs.heading,cs.velocityX * METERSTOINCHES,cs.velocityY * METERSTOINCHES,cs.angularVelocity, cs.timestamp);
     }
 
-    public ChoreoTrajectory(File f){
-        ObjectMapper om = new ObjectMapper();
+    private static ObjectMapper om;
+
+    /**call this in robot init so we don't have to wait for it at the start of auto*/
+    public static void init(){
+        om = new ObjectMapper();
+    }
+
+    public static DiscreteTraj generateTrajectory(File f){
         List<ChoreoState> choreoStates = null;
+
         try{
-            choreoStates = om.convertValue(om.readTree(f).get("samples"), new TypeReference<List<ChoreoState>>(){});
+            JsonNode node = om.readTree(f).get("samples");
+            choreoStates = om.convertValue(node, new TypeReference<List<ChoreoState>>(){});
         }catch(Exception e){
             e.printStackTrace();
         }
-        
-        path = choreoStates.stream().map((s) -> toSwerveState(s)).toList();
+
+        return new DiscreteTraj(new ArrayList<DiscreteSwerveState>(choreoStates.stream().map((s) -> toSwerveState(s)).toList()));
     }
+
+
 
     static class ChoreoState {
         double x,y,heading,angularVelocity,velocityX,velocityY, timestamp;
