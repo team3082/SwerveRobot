@@ -1,3 +1,5 @@
+package frc.robot.utils;
+
 import org.junit.jupiter.api.Test;
 
 import frc.robot.utils.RMath;

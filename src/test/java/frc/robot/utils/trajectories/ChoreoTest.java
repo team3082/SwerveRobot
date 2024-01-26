@@ -1,3 +1,6 @@
+package frc.robot.utils.trajectories;
+
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
