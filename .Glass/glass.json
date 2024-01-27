@@ -2,6 +2,9 @@
   "NetworkTables": {
     "transitory": {
       "Shuffleboard": {
+        "Positions": {
+          "open": true
+        },
         "open": true
       }
     },
@@ -12,7 +15,6 @@
     },
     "windows": {
       "/Shuffleboard/SmartDashboard/Field View": {
-        "image": "C:\\Dev\\SwerveRobot\\glass-resources\\Crescendo4K.PNG",
         "window": {
           "visible": true
         }

@@ -6,6 +6,15 @@ package frc.robot;
 
 import frc.robot.utils.Auto;
 import frc.robot.utils.PIDController;
+
+import java.lang.annotation.Target;
+
+import javax.management.MBeanInfo;
+
+import org.opencv.core.RotatedRect;
+
+import com.ctre.phoenix.led.CANdle.VBatOutputMode;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.subsystems.OI;
 import frc.robot.subsystems.Pigeon;
@@ -18,6 +27,11 @@ import frc.robot.utils.trajectories.BezierCurve;
 import frc.robot.utils.RTime;
 
 public class Robot extends TimedRobot {
+  
+  private Vector2 target = new Vector2(40,10);
+  private double rot = 20;
+  private final double DEAD_ZONE = 1;
+  private final double SPEED = 0.01;
 
   @Override
   public void robotInit() {
@@ -30,7 +44,9 @@ public class Robot extends TimedRobot {
     OI.init();
     Pigeon.setYaw(270);
     Telemetry.init();
-    SwervePosition.setPosition(new Vector2());
+    //SwervePosition.setPosition(new Vector2());
+
+    
   }
 
   @Override
@@ -47,7 +63,9 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     RTime.init();
     Pigeon.setYaw(270);
-    Auto.bezierCurveAutoTest();
+    SwervePID.setDestPt(target);
+    // Auto.bezierCurveAutoTest();
+    SwervePID.setDestRot(2*Math.PI);
   }
 
 
@@ -60,8 +78,52 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     SwervePosition.update();
     RTime.update();
-    Auto.update();
+
+    Vector2 drive = new Vector2(SwervePID.updateOutputX(), SwervePID.updateOutputY()).rotate(Math.PI/2);
+    double rotate = SwervePID.updateOutputRot();
+    
+    /*Vector2 displacement = target.sub(SwervePosition.getPosition());
+    double xSwerve = 0;
+    double ySwerve = 0;
+    
+    if(displacement.x > -DEAD_ZONE && displacement.x < DEAD_ZONE){
+      xSwerve = 0;
+    } else {
+      xSwerve = displacement.x;
+    }
+
+    if(displacement.y > -DEAD_ZONE && displacement.y < DEAD_ZONE){
+      ySwerve = 0;
+    } else {
+      ySwerve = displacement.y;
+    }
+
+    Vector2 move = new Vector2(-xSwerve, ySwerve);
+    move.x = ySwerve != 0? move.x/Math.abs(move.x) : 0;
+    move.y = ySwerve != 0? move.y/Math.abs(move.y) : 0;
+
+    System.out.println(target.sub(SwervePosition.getPosition()));
+    System.out.println(move);*/
+   
+    SwerveManager.rotateAndDrive(rotate, drive);
+    
   }
+
+  /* public double angleRot(Vector2 target){
+        double xValue = Swerve target.x;
+        double yValue = target.y;
+        
+        double currentXValue = SwervePosition.getPosition().x;
+        double currentYValue = SwervePosition.getPosition().y;
+
+        Math.acos((xValue-currentXValue)/(Math.sqrt(Math.pow(xValue-currentXValue, 2))))
+        Math.atan2(yValue, xValue)
+    }
+
+    angleRot(target);
+    // System.out.println(target.sub(SwervePosition.getPosition()));
+    
+    */
 
   @Override
   public void autonomousExit() {
@@ -69,13 +131,15 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void teleopInit() {
+  public void teleopInit() 
+  {
     OI.init();
     SwervePosition.setPosition(new Vector2());
   }
 
   @Override
-  public void teleopPeriodic() {
+  public void teleopPeriodic() 
+  {
     RTime.update();
     SwervePosition.update();
     OI.useInput();
@@ -83,23 +147,24 @@ public class Robot extends TimedRobot {
     System.out.println("Position: " + SwervePosition.getPosition().toString());
   }
 
-  @Override
-  public void disabledInit() {}
+  // @Override
+  // public void disabledInit() {}
 
-  @Override
-  public void disabledPeriodic() {}
+  // @Override
+  // public void disabledPeriodic() {}
 
-  @Override
-  public void testInit() {}
+  // @Override
+  // public void testInit() {}
 
-  @Override
-  public void testPeriodic() {}
+  // @Override
+  // public void testPeriodic() {}
 
-  @Override
-  public void simulationInit() {
+  // @Override
+  // public void simulationInit() 
+  // {
     
-  }
+  // }
 
-  @Override
-  public void simulationPeriodic() {}
+  // @Override
+  // public void simulationPeriodic() {}
 }
