@@ -8,6 +8,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import edu.wpi.first.wpilibj.Filesystem;
+
 import static frc.robot.Constants.METERSTOINCHES;
 
 public class ChoreoTrajectoryGenerator{
@@ -23,7 +25,8 @@ public class ChoreoTrajectoryGenerator{
         om = new ObjectMapper();
     }
 
-    public static DiscreteTraj generateTrajectory(File f){
+    public static DiscreteTraj generateTrajectory(String fileName){
+        File f = new File(Filesystem.getDeployDirectory(), "/deploy/choreo/" + fileName);
         List<ChoreoState> choreoStates = null;
 
         try{

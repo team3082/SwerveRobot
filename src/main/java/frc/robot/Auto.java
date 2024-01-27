@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.RobotBase;
 import frc.robot.autoframe.Autoframe;
 import frc.robot.autoframe.CurveAutoFrame;
 import frc.robot.autoframe.FollowBezierCurve;
@@ -18,6 +20,7 @@ import frc.robot.utils.Vector2;
 import frc.robot.utils.followers.PIDFollower;
 import frc.robot.utils.followers.SwerveFollower;
 import frc.robot.utils.trajectories.BezierCurve;
+import frc.robot.utils.trajectories.ChoreoTrajectoryGenerator;
 import frc.robot.utils.trajectories.LinearSpline;
 import frc.robot.utils.trajectories.QuinticHermite;
 import frc.robot.utils.trajectories.SwerveTrajectory;
@@ -51,6 +54,11 @@ public class Auto {
         };
 
         queueFrames(frames);
+    }
+
+    public static void choreoTest(){
+        Pigeon.setYaw(0);
+        ChoreoTrajectoryGenerator.generateTrajectory("UTest.traj");
     }
 
     public static void fourPieceAmpSide() {

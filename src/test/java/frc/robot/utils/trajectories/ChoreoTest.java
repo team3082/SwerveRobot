@@ -19,14 +19,14 @@ public class ChoreoTest {
 
     @Test
     public void ChoreoTrajectoryTest(){
-        DiscreteTraj dt = ChoreoTrajectoryGenerator.generateTrajectory(new File("src/main/deploy/deploy/choreo/UTest.traj"));
+        DiscreteTraj dt = ChoreoTrajectoryGenerator.generateTrajectory("UTest.traj");
         assertEquals(dt.length(), 3.3565504113888167, 0.0001);
         assertEquals(dt.get(1.7292593899659614).x, 6.423343099411647 * METERSTOINCHES, 0.0001);
     }
 
     @Test
     public void LongTest(){
-        DiscreteTraj dt = ChoreoTrajectoryGenerator.generateTrajectory(new File("src/main/deploy/deploy/choreo/New Path.traj"));
+        DiscreteTraj dt = ChoreoTrajectoryGenerator.generateTrajectory("New Path.traj");
         // assertEquals(ct.length(), 3.3565504113888167, 0.0001);
         // assertEquals(ct.get(1.7292593899659614).x, 6.423343099411647 * METERSTOINCHES, 0.0001);
     }
