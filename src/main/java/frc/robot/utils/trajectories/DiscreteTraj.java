@@ -25,10 +25,20 @@ public class DiscreteTraj implements SwerveTrajectory{
     }
 
     public SwerveState get(double t){
-        int posa = Collections.binarySearch(path, t);
-        if(posa == path.size()){
+        if(t > this.length()){
             return endState();
         }
+        int posa = path.size() -1;
+        for(int i = 0; i < path.size(); i++){
+            if(path.get(i).compareTo(t) > 0){
+                posa = i;
+                break;
+            }
+        }
+        if(posa >= path.size() - 1){
+            return endState();
+        }
+        System.out.println(posa);
         SwerveState a = path.get(posa);
         SwerveState b = path.get(posa+1);
         double deltaT = t - path.get(posa).time;

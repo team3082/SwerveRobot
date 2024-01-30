@@ -16,8 +16,8 @@
         "UTest": {
             "waypoints": [
                 {
-                    "x": 3.7024574279785156,
-                    "y": 5.338487148284912,
+                    "x": 5.055428504943848,
+                    "y": 6.265274524688721,
                     "heading": 0,
                     "isInitialGuess": false,
                     "translationConstrained": true,
@@ -384,14 +384,14 @@
                         "first"
                     ],
                     "type": "StopPoint",
-                    "uuid": "058c06a0-082c-4406-99ad-90017008b7f6"
+                    "uuid": "4b940aa4-7968-4ac8-a192-4603c95c14d3"
                 },
                 {
                     "scope": [
                         "last"
                     ],
                     "type": "StopPoint",
-                    "uuid": "9dbf9363-d6b3-4218-939f-f3bc73a14a7c"
+                    "uuid": "c14d8028-4e27-445c-aee7-27353d2c0145"
                 }
             ],
             "usesControlIntervalGuessing": true,
@@ -2147,14 +2147,14 @@
                         "first"
                     ],
                     "type": "StopPoint",
-                    "uuid": "d560d560-1efb-4c69-9719-d8ba4c3676d6"
+                    "uuid": "6f60b043-824a-4a7c-b968-c51e03759eec"
                 },
                 {
                     "scope": [
                         "last"
                     ],
                     "type": "StopPoint",
-                    "uuid": "f97ede6d-d404-419f-a0c9-b90adb6ba27d"
+                    "uuid": "60314d6d-13a6-45e0-9369-aabf5b0ef169"
                 }
             ],
             "usesControlIntervalGuessing": true,

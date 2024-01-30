@@ -58,7 +58,12 @@ public class Auto {
 
     public static void choreoTest(){
         Pigeon.setYaw(0);
-        ChoreoTrajectoryGenerator.generateTrajectory("UTest.traj");
+        SwerveTrajectory traj = ChoreoTrajectoryGenerator.generateTrajectory("UTest.traj");
+        PIDFollower controller = new PIDFollower();
+        controller.setTrajectory(traj);
+        SwervePosition.setPosition(traj.startState().getPos());
+        queueFrames(new TrajectoryFollow(controller));
+
     }
 
     public static void fourPieceAmpSide() {

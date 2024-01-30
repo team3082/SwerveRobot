@@ -14,6 +14,7 @@ import frc.robot.subsystems.swerve.SwervePID;
 import frc.robot.subsystems.swerve.SwervePosition;
 import frc.robot.utils.Vector2;
 import frc.robot.utils.trajectories.BezierCurve;
+import frc.robot.utils.trajectories.ChoreoTrajectoryGenerator;
 import frc.robot.utils.RTime;
 
 public class Robot extends TimedRobot {
@@ -29,6 +30,7 @@ public class Robot extends TimedRobot {
     OI.init();
     Pigeon.setYaw(270);
     Telemetry.init();
+    ChoreoTrajectoryGenerator.init();
     SwervePosition.setPosition(new Vector2());
   }
 
@@ -47,7 +49,8 @@ public class Robot extends TimedRobot {
     RTime.init();
     Pigeon.setYaw(270);
     // Auto.bezierCurveAutoTest();
-    Auto.trajFollowerTest();
+    // Auto.trajFollowerTest();
+    Auto.choreoTest();
   }
 
 

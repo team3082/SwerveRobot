@@ -48,7 +48,7 @@ public class PIDFollower extends SwerveFollower{
             desiredState = path.get(t);
         }
 
-        System.out.println(Arrays.toString(desiredState.toArray()));
+        // System.out.println(Arrays.toString(desiredState.toArray()));
         double[] error = currentState.getError(desiredState);
         // System.out.println(Arrays.toString(error));
         //updating int accumulator
