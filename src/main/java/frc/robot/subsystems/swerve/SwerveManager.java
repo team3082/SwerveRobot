@@ -14,12 +14,18 @@ public class SwerveManager {
 
     public static void init() {
         swerveModules = new SwerveModule[] {
-            new SwerveModule(5, 6, 1, -1, 289.424), // BR
-            new SwerveModule(7, 8, -1, -1, 95.537), // BL
-            new SwerveModule(1, 2, -1, 1, 249.521), // FL
-            new SwerveModule(3, 4, 1, 1, 208.213), // FR
+            new SwerveModule(5, 6, 1, -1, 107.754), // BR
+            new SwerveModule(7, 8, -1, -1, 98.965), // BL
+            new SwerveModule(1, 2, -1, 1, 250.225), // FL
+            new SwerveModule(3, 4, 1, 1, 210.322), // FR
         };
-       swerveModules[0].driveMotor.setInverted(true);
+        swerveModules[3].driveMotor.setInverted(false);
+       try {
+        Thread.sleep(1000);
+    } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
     }
 
     /**

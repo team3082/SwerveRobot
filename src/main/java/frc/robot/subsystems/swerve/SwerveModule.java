@@ -87,12 +87,6 @@ public class SwerveModule {
         this.steerMotor.burnFlash();
         this.driveMotor.burnFlash();
 
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         resetSteerEncoder();
 
     }
@@ -169,6 +163,11 @@ public class SwerveModule {
         } else {
             inverted = false;
         }
+
+        System.out.println(this.driveMotor.getDeviceId());
+        System.out.println("current pos: " + steerEncoder.getPosition());
+        System.out.println("abs encoder pos: " + absEncoder.getAbsolutePosition());
+        System.out.println("dest: " + destination);
 
         this.steerPID.setReference(destination, ControlType.kPosition);
 
