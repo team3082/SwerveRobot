@@ -21,7 +21,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    
     Pigeon.init();
     Pigeon.zero();
     SwerveManager.init();

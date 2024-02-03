@@ -2,9 +2,9 @@ package frc.robot;
 
 public class Tuning {
     // Swerve Tuning
-    public static final double SWERVE_STEER_P = 0.025;
-    public static final double SWERVE_STEER_I = 0.0001;
-    public static final double SWERVE_STEER_D = 0.06;
+    public static final double SWERVE_STEER_P = 0.012;
+    public static final double SWERVE_STEER_I = 0.000;
+    public static final double SWERVE_STEER_D = 0.1;
 
     public static final double SWERVE_DRIVE_P = 0.02;
     public static final double SWERVE_DRIVE_I = 0.0001;
